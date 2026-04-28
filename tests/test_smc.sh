@@ -1,7 +1,7 @@
 #!/bin/bash
 
 echo "========================================================="
-echo "🧪 Svarupa Morph Converter (SMC) - Integration Test Suite"
+echo "🧪 Sanskrit Morph Converter (SMC) - Integration Test Suite"
 echo "========================================================="
 
 # ---------------------------------------------------------

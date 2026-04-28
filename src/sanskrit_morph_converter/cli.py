@@ -91,7 +91,7 @@ def run_convert(args):
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Sanskrit Morph Converter (SMC): A universal mapping layer for Sanskrit NLP platforms."
+        description="Sanskrit Morph Converter (SMC): A universal mapping layer for Sanskrit Morphological Analysis."
     )
     subparsers = parser.add_subparsers(dest="command", required=True, help="Available commands")
 
