@@ -1,0 +1,7 @@
+Platform	Deprecated_Tag	Current_Tag
+SH	md.	mo.
+DCS	Tense=Aor	tense_aor
+DCS	Tense=Perf	tense_perf
+DCS	Tense=Impft	tense_impft
+DCS	Mood=Prec	mood_prec
+DCS	Mood=Inj	mood_inj

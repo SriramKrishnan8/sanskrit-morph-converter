@@ -1,0 +1,30 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "sanskrit_morph_converter"
+version = "0.1.0"
+description = "A Universal hub-and-spoke morphological representation converter for Sanskrit."
+readme = "README.md"
+requires-python = ">=3.7"
+dependencies = [
+    "pandas>=1.0.0",
+    "requests>=2.25.0",
+    "tqdm>=4.0.0",
+    "aksharamukha>=2.3.0"
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+sanskrit_morph_converter = ["data/*.tsv"]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.0.0",
+]
+
+[project.scripts]
+smc = "sanskrit_morph_converter.cli:main"

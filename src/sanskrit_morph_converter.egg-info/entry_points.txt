@@ -1,0 +1,2 @@
+[console_scripts]
+smc = sanskrit_morph_converter.cli:main
