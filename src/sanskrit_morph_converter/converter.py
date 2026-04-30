@@ -63,7 +63,7 @@ class RepresentationConverter:
                     self.pronoun_dcs_to_sh[dcs_byt5_val] = sh_scl_val
 
     
-    def convert(self, source_platform, target_platform, raw_input, output_format='json', output_script=None):
+    def convert(self, source_platform, target_platform, raw_input, output_format='json', output_script=None, input_script=None):
         if source_platform not in self.adapters or target_platform not in self.adapters:
             raise ValueError(f"Platform must be one of {list(self.adapters.keys())}")
 
@@ -84,6 +84,15 @@ class RepresentationConverter:
 
         # Determine the final script to use
         target_script = output_script or self.default_scripts.get(target_platform)
+
+        numerals = ['paFcan', 'Rar', 'saptan', 'arwan', 'navan', 'xaSan']
+        pronouns = [
+            "sarva", "viSva", "uBa", "uBaya", "dawara", "dawama", "anya", "anyawara", 
+            "iwara", "wvaw", "wva", "nema", "sama", "sima", "pUrva", "para", "avara", 
+            "xakRiNa", "uwwara", "apara", "aXara", "sva", "anwara", "wyax", "wax", 
+            "yax", "ewax", "ixam", "axas", "eka", "xvi", "yuRmax", "asmax", "Bavaw", "kim",
+            "mad", "wvax",
+        ]
         
         for context, tags in source_analyses:
             # 2. Normalize aliases (e.g., Aor -> Past)
@@ -91,29 +100,30 @@ class RepresentationConverter:
             
             # 3. Aggregate into the Pivot Hub
             pivot_pools = self.mapper.to_pivot(source_platform, clean_tags)
+
+            raw_stem = context.get('stem', '')
+            raw_root = context.get('root', '')
+            wx_stem = raw_stem
+            wx_root = raw_root
+
+            if transliterate:
+                pre_source_script = input_script if (input_script and input_script.lower() != 'autodetect') else self.default_scripts.get(source_platform, 'autodetect')
+                # Only translate if the source isn't ALREADY WX
+                if pre_source_script != 'WX':
+                    if raw_stem:
+                        wx_stem = transliterate.process(pre_source_script, 'WX', raw_stem)
+                    if raw_root:
+                        wx_root = transliterate.process(pre_source_script, 'WX', raw_root)
             
             for pivot_pool in pivot_pools:
                 if not pivot_pool:
                     continue
                 
-                # If SH provided the '*' (which maps to gender_none)
-                if 'gender_any' in pivot_pool:
-                    stem = context.get('stem', '')
-                    # You can load this list from a new numeral_map.tsv later
-                    numerals = ['paFcan', 'Rar', 'saptan', 'arwan', 'navan', 'xaSan'] 
-                    pronouns = [
-                        "sarva", "viSva", "uBa", "uBaya", "dawara", "dawama", "anya", "anyawara", 
-                        "iwara", "wvaw", "wva", "nema", "sama", "sima", "pUrva", "para", "avara", 
-                        "xakRiNa", "uwwara", "apara", "aXara", "sva", "anwara", "wyax", "wax", 
-                        "yax", "ewax", "ixam", "axas", "eka", "xvi", "yuRmax", "asmax", "Bavaw", "kim",
-                        "mad", "wvax",
-                    ]
-                    
-                    # Inject the correct NounType into the Pivot Hub!
-                    if stem in pronouns:
-                        pivot_pool.add('nt_dei')
-                    elif stem in numerals:
-                        pivot_pool.add('nt_num')
+                # Always check the WX stem and inject the Pivot Feature!
+                if wx_stem in pronouns:
+                    pivot_pool.add('nt_dei')
+                elif wx_stem in numerals:
+                    pivot_pool.add('nt_num')
                 
                 # 4. Generate Target Tags
                 match_data = self.mapper.from_pivot(target_platform, pivot_pool)
@@ -121,18 +131,10 @@ class RepresentationConverter:
                 # 5. Apply Lexical Mappings & Encode
                 for target_tags in match_data.get("tag_sets", []):
                     if target_tags:
+                        target_tags = set(self.mapper.output_normalize(target_platform, list(target_tags)))
+                        
                         # Create a copy so we don't mutate the original context for other branches
                         mapped_context = dict(context)
-                        root = mapped_context.get('root') or ''
-                        stem = mapped_context.get('stem') or ''
-                        
-                        # --- 1. PRE-TRANSLATE TO WX FOR LOOKUP ---
-                        wx_stem = stem
-                        wx_root = root
-                        
-                        if transliterate:
-                            if stem: wx_stem = transliterate.process('autodetect', 'WX', stem)
-                            if root: wx_root = transliterate.process('autodetect', 'WX', root)
                         
                         # --- 2. LEXICAL MAPPING LOGIC ---
                         if is_source_sh_scl and is_target_dcs_byt5:
@@ -154,14 +156,8 @@ class RepresentationConverter:
                             # Pronouns
                             if wx_stem in self.pronoun_dcs_to_sh:
                                 mapped_context['stem'] = self.pronoun_dcs_to_sh[wx_stem]
-                                mapped_context['root'] = self.pronoun_dcs_to_sh[wx_stem]
+                                mapped_context['root'] = ''
                                 mapped_context['_is_wx_stem'] = True
-                                mapped_context['_is_wx_root'] = True
-                            elif wx_root in self.pronoun_dcs_to_sh:
-                                mapped_context['stem'] = self.pronoun_dcs_to_sh[wx_root]
-                                mapped_context['root'] = self.pronoun_dcs_to_sh[wx_root]
-                                mapped_context['_is_wx_stem'] = True
-                                mapped_context['_is_wx_root'] = True
                                 
                             # Nijanta
                             if wx_stem in self.nijanta_dcs_to_sh:
@@ -178,10 +174,19 @@ class RepresentationConverter:
                             for key in lexical_keys:
                                 val = mapped_context.get(key)
                                 if val:
-                                    # If we pulled this from the TSV, we strictly force the source to WX
-                                    # Otherwise, we trust autodetect for the original words
-                                    source_script = 'WX' if mapped_context.get(f'_is_wx_{key}') else 'autodetect'
-                                    mapped_context[key] = transliterate.process(source_script, target_script, val)
+                                    # PRIORITY 1: Internal TSV lexical injection (Strictly WX)
+                                    if mapped_context.get(f'_is_wx_{key}'):
+                                        source_script = 'WX'
+                                    # PRIORITY 2: User explicitly provided an input script
+                                    elif input_script and input_script.lower() != 'autodetect':
+                                        source_script = input_script
+                                    # PRIORITY 3: Fallback to the Source Platform's native script
+                                    else:
+                                        source_script = self.default_scripts.get(source_platform, 'autodetect')
+                                        
+                                    # Only run if scripts are different!
+                                    if source_script != target_script:
+                                        mapped_context[key] = transliterate.process(source_script, target_script, val)
                             
                             # Clean up the temporary flags so they don't pollute the final context
                             mapped_context.pop('_is_wx_stem', None)
@@ -196,7 +201,7 @@ class RepresentationConverter:
             source_platform=source_platform
         )
     
-    def convert_bulk(self, source_platform, target_platform, raw_inputs_list, output_format='json', output_script=None):
+    def convert_bulk(self, source_platform, target_platform, raw_inputs_list, output_format='json', output_script=None, input_script=None):
         """
         Processes a list of inputs with a terminal progress bar.
         Returns a list of dictionaries containing the input, output, and status.
@@ -206,7 +211,7 @@ class RepresentationConverter:
         # Wrap the list in tqdm to automatically generate the progress bar
         for raw_input in tqdm(raw_inputs_list, desc=f"Converting {source_platform} ➔ {target_platform}"):
             try:
-                output = self.convert(source_platform, target_platform, raw_input, output_format=output_format, output_script=output_script)
+                output = self.convert(source_platform, target_platform, raw_input, output_format=output_format, output_script=output_script, input_script=input_script)
                 if isinstance(output, list):
                     if len(output) > 1:
                         status = "Ambiguous"
