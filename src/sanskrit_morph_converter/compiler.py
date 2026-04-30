@@ -63,6 +63,7 @@ def compile_mappings(sheet_id=DEFAULT_SHEET_ID, local_tsv_path=None):
         scl_val = str(row.get('SCL', '')).strip()
         sh_val = str(row.get('SH', '')).strip()
         byt5_val = str(row.get('ByT5', '')).strip()
+        byt5_new_val = str(row.get('ByT5_new', '')).strip()
         dcs_val = str(row.get('DCS', '')).strip()
         dcs_new_val = str(row.get('DCS_new', '')).strip()
         svarupa_val = str(row.get('Svarupa', '')).strip()
@@ -80,9 +81,10 @@ def compile_mappings(sheet_id=DEFAULT_SHEET_ID, local_tsv_path=None):
         # 2. THE UNIVERSAL PIVOT FEATURE
         pivot_val = str(row.get('pivot_grammar', '')).strip()
         canonical_dcs = dcs_new_val if dcs_new_val else dcs_val
+        canonical_byt5 = byt5_new_val if byt5_new_val else byt5_val
         
         # Determine the "Expanded_Features" for the reference sheet (No trackers used!)
-        expanded_kv = canonical_dcs if canonical_dcs else (scl_val if scl_val else sh_internal)
+        expanded_kv = canonical_val if canonical_val else (scl_val if scl_val else sh_internal)
 
         if pivot_val:
             pivot_feature = pivot_val
@@ -109,14 +111,21 @@ def compile_mappings(sheet_id=DEFAULT_SHEET_ID, local_tsv_path=None):
             normalizations.append({
                 'Platform': 'DCS', 
                 'Deprecated_Tag': dcs_val, 
-                'Current_Tag': pivot_feature
+                'Current_Tag': dcs_new_val
+            })
+        
+        if byt5_val and byt5_new_val and byt5_new_val != byt5_val:
+            normalizations.append({
+                'Platform': 'ByT5', 
+                'Deprecated_Tag': byt5_val, 
+                'Current_Tag': byt5_new_val
             })
 
         # 4. MAP PLATFORMS STRICTLY TO THIS ROW
         # If the cell is blank, the platform gets NOTHING for this row.
         if scl_val: tag_mappings['SCL'][scl_val].add(pivot_feature)
         if sh_internal: tag_mappings['SH'][sh_internal].add(pivot_feature)
-        if byt5_val: tag_mappings['ByT5'][byt5_val].add(pivot_feature)
+        if canonical_byt5: tag_mappings['ByT5'][canonical_byt5].add(pivot_feature)
         if canonical_dcs: tag_mappings['DCS'][canonical_dcs].add(pivot_feature)
         if svarupa_val: tag_mappings['Svarupa'][svarupa_val].add(pivot_feature)
         if canonical_val: tag_mappings['Canonical'][canonical_val].add(pivot_feature)

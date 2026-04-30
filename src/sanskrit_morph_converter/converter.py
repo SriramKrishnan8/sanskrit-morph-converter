@@ -67,9 +67,13 @@ class RepresentationConverter:
         if source_platform not in self.adapters or target_platform not in self.adapters:
             raise ValueError(f"Platform must be one of {list(self.adapters.keys())}")
 
+        # 0. Ensure the input string correctly interprets literal \t and \n from the CLI        
+        if isinstance(raw_input, str):
+            raw_input = raw_input.replace('\\t', '\t').replace('\\n', '\n')
+
         # 1. Decode returns a list of tuples: [(context, tags), (context, tags)]
         source_analyses = self.adapters[source_platform].decode(raw_input)
-                
+
         # This will hold all successfully translated (context, tags) tuples
         translated_analyses = []
 
@@ -186,7 +190,11 @@ class RepresentationConverter:
                         translated_analyses.append((mapped_context, target_tags))
 
         # 6. Pass the ENTIRE batch of translations to the target adapter to build the final payload!
-        return self.adapters[target_platform].encode(translated_analyses, output_format=output_format)
+        return self.adapters[target_platform].encode(
+            translated_analyses,
+            output_format=output_format,
+            source_platform=source_platform
+        )
     
     def convert_bulk(self, source_platform, target_platform, raw_inputs_list, output_format='json', output_script=None):
         """

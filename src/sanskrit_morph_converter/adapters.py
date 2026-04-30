@@ -6,7 +6,7 @@ class BaseAdapter:
         """Converts raw platform output into a LIST of tuples: [(context_dict, tag_list)]"""
         raise NotImplementedError
         
-    def encode(self, translated_analyses_list, output_format='json'):
+    def encode(self, translated_analyses_list, output_format='json', source_platform='Unknown'):
         """Reconstructs the platform's native payload format."""
         raise NotImplementedError
 
@@ -26,7 +26,7 @@ class DCSAdapter(BaseAdapter):
                 parsed = json.loads(raw_data)
                 items = parsed if isinstance(parsed, list) else [parsed]
             except json.JSONDecodeError:
-                items = [raw_data]
+                items = raw_data.split(" ")
         else:
             items = [raw_data]
             
@@ -44,6 +44,11 @@ class DCSAdapter(BaseAdapter):
                     lemma = parts[2]
                     morph_str = parts[5]
                     if morph_str == '_': morph_str = ''
+                elif len(parts) == 3:
+                    # 2. Simplified CLI Format (word \t lemma \t tags)
+                    word = parts[0]
+                    lemma = parts[1]
+                    morph_str = parts[2]
                 else:
                     word = ""
                     lemma = ""
@@ -100,7 +105,7 @@ class DCSAdapter(BaseAdapter):
         
         return analyses
 
-    def encode(self, translated_analyses_list, output_format='json'):
+    def encode(self, translated_analyses_list, output_format='json', source_platform='Unknown'):
         """
         Reconstructs the DCS output (CoNLL-U format). 
         Dynamically selects whether to print the stem or root as the lemma.
@@ -145,7 +150,8 @@ class DCSAdapter(BaseAdapter):
                 out_obj = {
                     "word": word,
                     "lemma": lemma,
-                    "morph": morph_dict
+                    "morph": morph_dict,
+                    "source": source_platform
                 }
                 if out_obj not in results:
                     results.append(out_obj)
@@ -175,10 +181,10 @@ class ByT5Adapter(BaseAdapter):
                 parsed = json.loads(raw_data)
                 items = parsed if isinstance(parsed, list) else [parsed]
             except json.JSONDecodeError:
-                items = [raw_data]
+                items = raw_data.split()
         else:
             items = [raw_data]
-            
+
         analyses = []
         for item in items:
             if isinstance(item, dict) and 'morph' in item:
@@ -244,7 +250,7 @@ class ByT5Adapter(BaseAdapter):
             
         return analyses
 
-    def encode(self, translated_analyses_list, output_format='json'):
+    def encode(self, translated_analyses_list, output_format='json', source_platform='Unknown'):
         """
         Reconstructs the ByT5 format: word_lemma_morph
         Dynamically selects whether to print the stem or root as the lemma.
@@ -287,7 +293,8 @@ class ByT5Adapter(BaseAdapter):
                 out_obj = {
                     "word": word,
                     "lemma": lemma,
-                    "morph": morph_dict
+                    "morph": morph_dict,
+                    'source': source_platform
                 }
                 if out_obj not in results:
                     results.append(out_obj)
@@ -370,7 +377,7 @@ class SHAdapter(BaseAdapter):
                     
         return analyses
 
-    def encode(self, translated_analyses_list, output_format='json'):
+    def encode(self, translated_analyses_list, output_format='json', source_platform='Unknown'):
         """
         Reconstructs a strictly compliant SH JSON dictionary.
         Uses a heuristic to split the translated tags back into 'derivational' and 'inflectional'.
@@ -426,30 +433,28 @@ class SHAdapter(BaseAdapter):
         # If it's blank, we need to stitch it together (e.g., from DCS source)
         needs_stitching = not full_input_string
 
-        # Track the memory ID of contexts we have already stitched to prevent duplication
-        seen_contexts = set()
+        seg_string = ""
+        morph_array_builder = []
+        last_raw_word = None
 
         for context, tags_set in translated_analyses_list:
-            # 0. STITCH THE COMPOUND CONTEXT
-            ctx_id = id(context)
-            if ctx_id not in seen_contexts:
-                seen_contexts.add(ctx_id)
+            raw_word = context.get('raw_word', '')
+            
+            # 0. SEQUENTIAL STITCHING & GROUPING
+            # If the word changes, start a new group and add to segmentation
+            if raw_word != last_raw_word:
+                if seg_string and not seg_string.endswith('-'):
+                    seg_string += " " # Add space between distinct words
+                seg_string += raw_word
+                last_raw_word = raw_word
 
-                raw_word = context.get('raw_word', '') # e.g., "kavi-"
-                clean_word = context.get('clean_word', '') # e.g., "kavi"
-
-                if needs_stitching:
-                    if clean_word:
-                        segmentation.append(clean_word)
-
-                    # Build the full word (kavi- + kratuH -> kavikratuH)
-                    if raw_word:
-                        if full_input_string and not full_input_string.endswith('-'):
-                            full_input_string += " " + raw_word # Add space for new word
-                        elif full_input_string.endswith('-'):
-                            full_input_string = full_input_string[:-1] + raw_word # Merge compound
-                        else:
-                            full_input_string = raw_word
+                morph_array_builder.append({
+                    'word': raw_word,
+                    'stem': context.get('stem', ''),
+                    'root': context.get('root', ''),
+                    'derivational_morph': "",
+                    'inflectional_morphs': []
+                })
             
             # Check if this is a nominal (has case) but is missing gender
             has_case = any(t in ['nom.', 'acc.', 'i.', 'dat.', 'abl.', 'g.', 'loc.', 'voc.', 'iic.', 'ifc.'] for t in tags_set)
@@ -489,41 +494,51 @@ class SHAdapter(BaseAdapter):
             derivational_string = " ".join(derivational_list)
             inflectional_string = " ".join(inflectional_list)
 
-            # 3. GROUP BY CONTEXT AND DERIVATIONAL BASE
-            group_key = (
-                clean_word,
-                context.get('stem', ''),
-                context.get('root', ''),
-                derivational_string
-            )
-
-            if group_key not in grouped_morphs:
-                grouped_morphs[group_key] = []
-            if inflectional_string:
-                grouped_morphs[group_key].append(inflectional_string)
+            # 3. APPEND TAGS TO CURRENT WORD'S GROUP
+            # morph_array_builder[-1] represents the current word we are stitching
+            if derivational_string and not morph_array_builder[-1]['derivational_morph']:
+                morph_array_builder[-1]['derivational_morph'] = derivational_string
+                
+            if inflectional_string and inflectional_string not in morph_array_builder[-1]['inflectional_morphs']:
+                morph_array_builder[-1]['inflectional_morphs'].append(inflectional_string)
 
         # 4. BUILD THE FINAL JSON PAYLOAD
         morph_array = []
-        for (word, stem, root, deriv_str), infl_list in grouped_morphs.items():
-            entry = {
-                'word': word,
-                'stem': stem,
-                'root': root,
+        for entry in morph_array_builder:
+            # Optional Ambiguity Filter
+            infl_list = entry['inflectional_morphs']
+            if any('iic.' in infl for infl in infl_list):
+                infl_list = [infl for infl in infl_list if 'iiv.' not in infl]
+
+            morph_dict = {
+                'word': entry['word'],
+                'stem': entry['stem'],
+                'root': entry['root'],
                 'inflectional_morphs': infl_list
             }
-            if deriv_str:
-                entry['derivational_morph'] = deriv_str
-                
-            morph_array.append(entry)
+            if entry['derivational_morph']:
+                morph_dict['derivational_morph'] = entry['derivational_morph']
+            morph_array.append(morph_dict)
         
         # 5. Build the final SH-Compliant Dictionary
+        if needs_stitching:
+            # If the source (like ByT5) didn't provide a full input string, we build it!
+            # seg_string looks like: "ratna-dhātamam"
+            final_segmentation = [seg_string] if seg_string else []
+            # SH input strips hyphens and spaces
+            final_input = seg_string.replace('-', '').replace(' ', '')
+        else:
+            # If the source (like SH) already provided them, pass them straight through
+            final_segmentation = segmentation
+            final_input = full_input_string
+        
         # We assume 'Success' since the translation engine successfully generated these tags.
         sh_json = {
-            'input': full_input_string.replace('-', ''),
+            'input': final_input,
             'status': 'Success',
-            'segmentation': segmentation,
+            'segmentation': final_segmentation,
             'morph': morph_array,
-            'source': 'morph-mapper'
+            'source': source_platform
         }
 
         return sh_json
@@ -554,7 +569,7 @@ class SCLAdapter(BaseAdapter):
                 
         return analyses
 
-    def encode(self, translated_analyses_list, output_format='json'):
+    def encode(self, translated_analyses_list, output_format='json', source_platform='Unknown'):
         """UPDATED: Accepts the full payload list."""
         if not translated_analyses_list:
             return []
@@ -593,7 +608,7 @@ class SvarupaAdapter(BaseAdapter):
                     
         return [(context, all_tags)] if all_tags else []
 
-    def encode(self, translated_analyses_list, output_format='json'):
+    def encode(self, translated_analyses_list, output_format='json', source_platform='Unknown'):
         """UPDATED: Accepts the full payload list."""
         if not translated_analyses_list:
             return []
@@ -608,10 +623,58 @@ class SvarupaAdapter(BaseAdapter):
     
 class CanonicalAdapter(BaseAdapter):
     def decode(self, raw_data):
-        """Not strictly needed unless you plan to use Canonical as an input source later."""
-        return []
+        """Parses Canonical strings (word_lemma_tags) or flat JSON arrays."""
+        if isinstance(raw_data, list):
+            items = raw_data
+        elif isinstance(raw_data, str):
+            try:
+                parsed = json.loads(raw_data)
+                items = parsed if isinstance(parsed, list) else [parsed]
+            except json.JSONDecodeError:
+                items = raw_data.split() 
+        else:
+            items = [raw_data]
 
-    def encode(self, translated_analyses_list, output_format='json'):
+        analyses = []
+        for item in items:
+            if isinstance(item, dict):
+                word = item.get('word', '')
+                stem = item.get('stem', '')
+                root = item.get('root', '')
+                
+                # Reconstruct tags from flat JSON
+                tags = item.get('inflectional_morphs', []).copy()
+                if item.get('derivational_morph'):
+                    tags.append(item.get('derivational_morph'))
+                    
+            elif isinstance(item, str):
+                parts = item.split('_')
+                if len(parts) >= 3:
+                    word = parts[0]
+                    lemma = parts[1]
+                    morph_str = "_".join(parts[2:]) 
+                elif len(parts) == 2:
+                    word, lemma, morph_str = parts[0], parts[1], ""
+                else:
+                    word, lemma, morph_str = item, "", ""
+                
+                stem = root = lemma
+                tags = [t for t in morph_str.split('|') if t and t.strip()]
+            else:
+                continue
+
+            context = {
+                'full_input': '',
+                'raw_word': word,
+                'clean_word': word.rstrip('-'),
+                'stem': stem,
+                'root': root,
+            }
+            analyses.append((context, tags))
+            
+        return analyses
+
+    def encode(self, translated_analyses_list, output_format='json', source_platform='Unknown'):
         """Outputs exactly: input, stem, root, and a sorted morph string."""
         if not translated_analyses_list:
             return []
@@ -621,26 +684,59 @@ class CanonicalAdapter(BaseAdapter):
             word = context.get('raw_word', '')
             stem = context.get('stem', '')
             root = context.get('root', '')
-            
-            # Sort alphabetically so evaluations are mathematically consistent
-            morph_str = "|".join(sorted(tags_set))
-            
+
+            # -----------------------------------------
+            # JSON MODE
+            # -----------------------------------------
             if output_format == 'json':
-                out_obj = {
+                derivational_morph = ""
+                inflectional_morphs = []
+
+                # Heuristic to separate Canonical tags into Derivational vs Inflectional
+                for tag in tags_set:
+                    if not tag or not tag.strip(): 
+                        continue
+
+                    # Check against the keywords from your Canonical sheet
+                    if any(keyword in tag for keyword in ["Participle", "Gerundive", "Absolutive", "Infinitive", "Derivative"]):
+                        derivational_morph = tag
+                    else:
+                        inflectional_morphs.append(tag)
+
+                entry = {
                     "input": word,
                     "stem": stem,
                     "root": root,
-                    "morph": morph_str
+                    "derivational_morph": derivational_morph,
+                    "inflectional_morphs": inflectional_morphs,
+                    "source": source_platform
                 }
-                if out_obj not in results:
-                    results.append(out_obj)
+
+                if entry not in results:
+                    results.append(entry)
+
+            # -----------------------------------------
+            # STRING MODE
+            # -----------------------------------------
             else:
-                # String output: input_stem_root_morph
-                word_out = word if word else "_"
-                stem_out = stem if stem else "_"
-                root_out = root if root else "_"
-                out_str = f"{word_out}_{stem_out}_{root_out}_{morph_str}"
+                # Sort alphabetically so evaluations are mathematically consistent
+                morph_str = "|".join(sorted(tags_set))
+                clean_tags = [t for t in tags_set if t and t.strip()]
+            
+                if stem and root:
+                    lemma = f"{stem}_{root}"
+                elif stem:
+                    lemma = stem
+                elif root:
+                    lemma = root
+                else:
+                    lemma = stem
                 
+                word_out = word if word else "_"
+                lemma_out = lemma if lemma else "_"
+                
+                out_str = f"{word_out}_{lemma_out}_{morph_str}"
+
                 if out_str not in results:
                     results.append(out_str)
                     

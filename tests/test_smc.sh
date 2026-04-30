@@ -76,6 +76,40 @@ echo -e "\n--- Test 9.B: Tags Only [ByT5 -> SH] ---"
 # ByT5 tag string should dynamically build an SH JSON with empty words/stems
 smc convert ByT5 SH -i "__Case=Loc|Gender=Masc|Number=Plur" --format json
 
+# ---------------------------------------------------------
+# TEST BATCH 6: Cross-Platform Matrix (DCS, Canonical, SH, ByT5)
+# ---------------------------------------------------------
+
+echo -e "\n--- Test 10.A: [ByT5 -> DCS] (Noun) ---"
+smc convert ByT5 DCS -i "agnim_agni_Case=Acc|Gender=Masc|Number=Sing" --format string
+
+echo -e "\n--- Test 10.B: [DCS -> ByT5] (Absolutive/Converb mismatch testing) ---"
+smc convert DCS ByT5 -i "kṛtvā\tkṛ\tVerbForm=Abs" --format string
+
+echo -e "\n--- Test 11.A: [SH -> DCS] (Noun) ---"
+smc convert SH DCS -i '{"input": "यज्ञस्य", "status": "Success", "segmentation": ["यज्ञस्य"], "morph": [{"word": "यज्ञस्य", "stem": "यज्ञ", "root": "", "derivational_morph": "", "inflectional_morphs": ["m. sg. g."]}], "source": "SH-Local"}' --format string
+
+echo -e "\n--- Test 11.B: [DCS -> SH] (Participle) ---"
+smc convert DCS SH -i "gacchan\tgam\tCase=Nom|Gender=Masc|Number=Sing|Tense=Pres|VerbForm=Part" --format json
+
+echo -e "\n--- Test 12.A: [ByT5 -> Canonical] (Gerundive Expansion) ---"
+smc convert ByT5 Canonical -i "īḍyaḥ_īḍ_Case=Nom|Gender=Masc|Number=Sing|VerbForm=Gdv" --format string
+
+echo -e "\n--- Test 12.B: [Canonical -> ByT5] (Gerundive Truncation) ---"
+smc convert Canonical ByT5 -i "īḍyaḥ_īḍ_Case=Nominative|Gender=Masculine|Number=Singular|VerbForm=Gerundive" --format string
+
+echo -e "\n--- Test 13.A: [DCS -> Canonical] (Participle Expansion) ---"
+smc convert DCS Canonical -i "rājantam\trāj\tCase=Acc|Gender=Masc|Number=Sing|Tense=Pres|VerbForm=Part" --format string
+
+echo -e "\n--- Test 13.B: [Canonical -> DCS] (Participle Truncation) ---"
+smc convert Canonical DCS -i "rājantam_rāj_Case=Accusative|Gender=Masculine|Number=Singular|Tense=Present|VerbForm=Participle" --format string
+
+echo -e "\n--- Test 14.A: [SH -> Canonical] (Full Translation) ---"
+smc convert SH Canonical -i '{"input": "अग्निम्", "status": "Success", "segmentation": ["अग्निम्"], "morph": [{"word": "अग्निम्", "stem": "अग्नि", "root": "", "derivational_morph": "", "inflectional_morphs": ["m. sg. acc."]}], "source": "SH-Local"}' --format json
+
+echo -e "\n--- Test 14.B: [Canonical -> SH] (Full Translation) ---"
+smc convert Canonical SH -i "agnim_agni_Case=Accusative|Gender=Masculine|Number=Singular" --format json
+
 echo -e "\n========================================================="
 echo "✅ Test Suite Complete"
 echo "========================================================="

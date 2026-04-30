@@ -1,52 +1,52 @@
 pivot_grammar	Expanded_Features	English	Sanskrit
-nt_nam	vargaH:nA	Name	नाम
-nt_dei	vargaH:sarva	Deictic	सर्वनाम
-nt_car	vargaH:safKyeya	Cardinal	सङ्ख्येय
-nt_num	vargaH:safKyA		
-nt_ord	vargaH:pUraNa		
-gender_masc	Gender=Masc	masculine	पुल्लिङ्गम्
-gender_fem	Gender=Fem	feminine	स्त्रीलिङ्गम्
-gender_neut	Gender=Neut	neuter	नपुंसकलिङ्गम्
-gender_any	*	any	त्रिलिङ्गम्
-case_nom	Case=Nom	nominative	प्रथमा
-case_acc	Case=Acc	accusative	द्वितीया
-case_ins	Case=Ins	instrumental	तृतीया
-case_dat	Case=Dat	dative	चतुर्थी
-case_abl	Case=Abl	ablative	पञ्चमी
-case_gen	Case=Gen	genitive	षष्ठी
-case_loc	Case=Loc	locative	सप्तमी
-case_voc	Case=Voc	vocative	सम्बोधन
-num_sg	Number=Sing	singular	एकवचनम्
+nt_nam	NounType=Name	Name	नाम
+nt_dei	NounType=Deictic	Deictic	सर्वनाम
+nt_car	NounType=Cardinal	Cardinal	सङ्ख्येय
+nt_num	NounType=Numeral		
+nt_ord	NounType=Ordinal		
+gender_masc	Gender=Masculine	masculine	पुल्लिङ्गम्
+gender_fem	Gender=Feminine	feminine	स्त्रीलिङ्गम्
+gender_neut	Gender=Neuter	neuter	नपुंसकलिङ्गम्
+gender_any	Gender=Any	any	त्रिलिङ्गम्
+case_nom	Case=Nominative	nominative	प्रथमा
+case_acc	Case=Accusative	accusative	द्वितीया
+case_ins	Case=Instrumental	instrumental	तृतीया
+case_dat	Case=Dative	dative	चतुर्थी
+case_abl	Case=Ablative	ablative	पञ्चमी
+case_gen	Case=Genitive	genitive	षष्ठी
+case_loc	Case=Locative	locative	सप्तमी
+case_voc	Case=Vocative	vocative	सम्बोधन
+num_sg	Number=Singular	singular	एकवचनम्
 num_du	Number=Dual	dual	द्विवचनम्
-num_pl	Number=Plur	plural	बहुवचनम्
-prev	upasarga	Preverb	उपसर्गः
+num_pl	Number=Plural	plural	बहुवचनम्
+prev	Preverb	Preverb	उपसर्गः
 person_1	Person=1	First Person	उत्तम
 person_2	Person=2	Second Person	मध्यम
 person_3	Person=3	Third Person	प्रथम
-ca	sanAxi_prawyayaH:Nic	Causative	णिच्
-des	sanAxi_prawyayaH:san	Desiderative	सन्
-int	sanAxi_prawyayaH:yaf	Intensive	यङ्
-int_luk	int. luk.	Intensive-luk	यङ्-लुक्
-ca_int	ca. int.	Causative Intensive	यङ्-णिच्
-des_int	des. int.	Desiderative Intensive	यङ्-सन्
-des_ca	des. ca.	Desiderative Causative	णिच्-सन्
-des_ca_int	des. ca. int.	Desiderative Causative Intensive	यङ्-णिच्-सन्
-tense_pres	Tense=Pres	Present Tense	वर्तमानकालः
+ca	Conjugation=Causative	Causative	णिच्
+des	Conjugation=Desiderative	Desiderative	सन्
+int	Conjugation=Intensive	Intensive	यङ्
+int_luk	Conjugation=IntensiveLUK	Intensive-luk	यङ्-लुक्
+ca_int	Conjugation=CausativeIntensive	Causative Intensive	यङ्-णिच्
+des_int	Conjugation=DesiderativeIntensive	Desiderative Intensive	यङ्-सन्
+des_ca	Conjugation=DesiderativeCausative	Desiderative Causative	णिच्-सन्
+des_ca_int	Conjugation=DesiderativeCausativeIntensive	Desiderative Causative Intensive	यङ्-णिच्-सन्
+tense_pres	Tense=Present	Present Tense	वर्तमानकालः
 tense_past	Tense=Past	Past Tense	भूतकालः
-tense_fut	Tense=Fut	Future Tense	भविष्यत्कालः
-tense_aor	Tense=Past	Aorist Tense	अद्यतन-भूतकालः
-tense_perf	Tense=Past	Perfect Tense	परोक्ष-भूतकालः
-tense_impft	Tense=Impf	Imperfect Tense	अनद्यतन-भूतकालः
-tense_plp	Tense=plp	Pluperfect Tense	छान्दस-भूतकालः
-mood_ind	Mood=Ind	Indicative	निश्चयार्थः
-mood_imp	Mood=Imp	Imperative	आज्ञार्थः
-mood_opt	Mood=Opt	Optative	विध्यर्थः
-mood_sub	Mood=Sub	Subjunctive	छान्दसो विध्यर्थः
-mood_jus	Mood=Jus	Jussive	निषेधार्थः
-mood_prec	Mood=Opt	Precative	आशीरर्थः
-mood_inj	Mood-Jus	Injunctive	निषेधार्थः
-mood_cond	Mood=Cond	Conditional	हेतुहेतुमद्भावः
-formation_peri	Formation=peri	Periphrastic	अनुप्रयोगः
+tense_fut	Tense=Future	Future Tense	भविष्यत्कालः
+tense_aor	Tense=Aorist	Aorist Tense	अद्यतन-भूतकालः
+tense_perf	Tense=Perfect	Perfect Tense	परोक्ष-भूतकालः
+tense_impft	Tense=Imperfect	Imperfect Tense	अनद्यतन-भूतकालः
+tense_plp	Tense=Pluperfect	Pluperfect Tense	छान्दस-भूतकालः
+mood_ind	Mood=Indicative	Indicative	निश्चयार्थः
+mood_imp	Mood=Imperative	Imperative	आज्ञार्थः
+mood_opt	Mood=Optative	Optative	विध्यर्थः
+mood_subj	Mood=Subjunctive	Subjunctive	छान्दसो विध्यर्थः
+mood_jus	Mood=Injunctive	Jussive	निषेधार्थः
+mood_prec	Mood=Precative	Precative	आशीरर्थः
+mood_inj	Mood=Jussive	Injunctive	निषेधार्थः
+mood_cond	Mood=Conditional	Conditional	हेतुहेतुमद्भावः
+formation_peri	Formation=Periphrastic	Periphrastic	अनुप्रयोगः
 formation_root	Formation=root	Root	मूलम्
 formation_them	Formation=them	Thematic	अ-विकरणः
 formation_red	Formation=red	Reduplicated	द्वित्वम्
@@ -76,212 +76,212 @@ tense_aor|mood_ind|formation_sis	aor_6	sis-Aorist	सिस्
 tense_aor|mood_ind|formation_sa	aor_7	sa-Aorist	क्ष
 tense_aor|mood_inj	aor. inj.	aorist injunctive	लुङ् (अ-आ-अभाव)
 tense_pres|mood_subj	lakAraH:let	present-subjunctive	लेट्
-tense_aor|mood_subj	aor. subj.	aorist-subjunctive	
+tense_aor|mood_subj	aor. subj.	aorist-subjunctive	लेट् (विशेष)
 tense_plp|mood_ind	plp. pft.	pluperfect-indicative	लङ् (विशेष)
-paxa_parasmE	paxI:parasmEpaxI	Parasmaipada	परस्मैपद
-paxa_Awmane	paxI:AwmanepaxI	Ātmanepada	आत्मनेपद
-prayoga_karwari	prayogaH:karwari	Active	कर्तरि
-prayoga_karmaNi	prayogaH:karmaNi	Passive	कर्मणि
-prayoga_BAve	prayogaH:BAve	Bhāva	भावे
-prayoga_vedic_karwari			
-prayoga_vedic_karmaNi			
-prayoga_vedic_BAve			
+paxa_parasmE	PaxI=ParasmE	Parasmaipada	परस्मैपद
+paxa_Awmane	PaxI=Awmane	Ātmanepada	आत्मनेपद
+prayoga_karwari	Prayoga=Karwari	Active	कर्तरि
+prayoga_karmaNi	Prayoga=KarmaNi	Passive	कर्मणि
+prayoga_BAve	Prayoga=BAve	Bhāva	भावे
+prayoga_vedic_karwari	Prayoga=VedicKarwari		
+prayoga_vedic_karmaNi	Prayoga=VedicKarmaNi		
+prayoga_vedic_BAve	Prayoga=VedicBAve		
 prayoga_karwari|paxa_parasmE	ac.	Active Voice	कर्तरि परस्मैपद
 prayoga_karwari|paxa_Awmane	md.	Middle Voice	कर्तरि आत्मनेपद
-prayoga_karmaNi|paxa_Awmane	Voice=Pass	Passive Voice	कर्मणि
+prayoga_karmaNi|paxa_Awmane	ps.	Passive Voice	कर्मणि
 prayoga_vedic_karwari|paxa_parasmE		Vedic Active	छान्दस परस्मैपद
 prayoga_vedic_karwari|paxa_Awmane		Vedic Middle	छान्दस आत्मनेपद
 prayoga_vedic_karmaNi|paxa_Awmane		Vedic Passive	छान्दस कर्मणि
-class_1	gaNaH:BvAxiH	class 1	भ्वादिः
-class_2	gaNaH:axAxiH	class 2	अदादिः
-class_3	gaNaH:juhowyAxiH	class 3	जुहोत्यादिः
-class_4	gaNaH:xivAxiH	class 4	दिवादिः
-class_5	gaNaH:svAxiH	class 5	स्वादिः
-class_6	gaNaH:wuxAxiH	class 6	तुदादिः
-class_7	gaNaH:ruXAxiH	class 7	रुधादिः
-class_8	gaNaH:wanAxiH	class 8	तनादिः
-class_9	gaNaH:kryAxiH	class 9	क्र्यादिः
-class_10	gaNaH:curAxiH	class 10	चुरादिः
-class_vn	[vn.]	Denominative Verb	नामधातु
-class_sn		Sūtra Verb	सौत्रधातु
-ind	Case=Ind	Indeclinable	अव्ययम्
-krt_ind	vargaH:kqw_avy	kṛt-avyayam	कृत्-अव्ययम्
-tad_ind	vargaH:waxXiwa_avy	taddhita-avyayam	तद्धित-अव्ययम्
-verbform_part		Participle	कृदन्तम्
-verbform_gdv		Gerundive	कृत्यः
-verbform_abs	VerbForm=Conv	Converb	अव्ययकृदन्तम्
-kqw_yaw			
-kqw_anIyar			
-kqw_wavya			
-kqw_kwvA			
-kqw_lyap			
-kqw_Namul			
-kqw_wumun			
-kqw_Nyaw			
+class_1	Class=1	class 1	भ्वादिः
+class_2	Class=2	class 2	अदादिः
+class_3	Class=3	class 3	जुहोत्यादिः
+class_4	Class=4	class 4	दिवादिः
+class_5	Class=5	class 5	स्वादिः
+class_6	Class=6	class 6	तुदादिः
+class_7	Class=7	class 7	रुधादिः
+class_8	Class=8	class 8	तनादिः
+class_9	Class=9	class 9	क्र्यादिः
+class_10	Class=10	class 10	चुरादिः
+class_vn	Class=VN	Denominative Verb	नामधातु
+class_sn	Class=SN	Sūtra Verb	सौत्रधातु
+ind	Case=Indeclinable	Indeclinable	अव्ययम्
+krt_ind	Case=IndeclinablePrimaryDerivative	kṛt-avyayam	कृत्-अव्ययम्
+tad_ind	Case=IndeclinableSecondaryDerivative	taddhita-avyayam	तद्धित-अव्ययम्
+verbform_part	VerbForm=Participle	Participle	कृदन्तम्
+verbform_gdv	VerbForm=Gerundive	Gerundive	कृत्यः
+verbform_abs	VerbForm=Absolutive	Converb	अव्ययकृदन्तम्
+kqw_yaw	PrimaryDerivative=yaw		
+kqw_anIyar	PrimaryDerivative=anIyar		
+kqw_wavya	PrimaryDerivative=wavya		
+kqw_kwvA	PrimaryDerivative=kwvA		
+kqw_lyap	PrimaryDerivative=lyap		
+kqw_Namul	PrimaryDerivative=Namul		
+kqw_wumun	PrimaryDerivative=wumun		
+kqw_Nyaw	PrimaryDerivative=Nyaw		
 verbform_part|tense_pres	ppr.	Present Participle	वर्तमानकालिक-कृदन्तम् (सत्)
 verbform_part|tense_perf	ppf.	Perfect Participle	परोक्षभूतकालिक-कृदन्तम् (लिडादेशः)
 verbform_part|tense_fut	pfu.	Future Participle	भविष्यत्कालिक-कृदन्तम् (लृटः सद्वा)
-verbform_part|tense_pres|prayoga_karwari|paxa_parasmE	kqw_prawyayaH:Sawq_lat	Present Active Participle	शतृ_लट्
-verbform_part|tense_pres|prayoga_karwari|paxa_Awmane	kqw_prawyayaH:SAnac_lat	Present Middle Participle	शानच्_लट्
-verbform_part|tense_pres|prayoga_karmaNi|paxa_Awmane	kqw_prawyayaH:SAnac_lat	Present Passive Participle	शानच्_लट् कर्मणि
-verbform_part|tense_past|prayoga_karwari	kqw_prawyayaH:kwavawu	Past Active Participle	क्तवतु
-verbform_part|tense_past|prayoga_karmaNi	kqw_prawyayaH:kwa	Past Passive Participle	क्त
-verbform_part|tense_perf|prayoga_kartari|pada_parasmai	kqw_prawyayaH:kvasu	Perfect Active Participle	लिडादेश (क्वसु)
-verbform_part|tense_perf|prayoga_kartari|pada_atmane	kqw_prawyayaH:kAnac	Perfect Middle Participle	लिडादेश (कानच्)
-verbform_part|tense_fut|prayoga_kartari|pada_parasmai	kqw_prawyayaH:Sawq_lqt	Future Active Participle	शतृ_लृट्
-verbform_part|tense_fut|prayoga_kartari|pada_atmane	kqw_prawyayaH:SAnac_lqt	Future Middle Participle	शानच्_लृट्
+verbform_part|tense_pres|prayoga_karwari|paxa_parasmE	PrimaryDerivative=Sawq	Present Active Participle	शतृ_लट्
+verbform_part|tense_pres|prayoga_karwari|paxa_Awmane	PrimaryDerivative=SAnac	Present Middle Participle	शानच्_लट्
+verbform_part|tense_pres|prayoga_karmaNi|paxa_Awmane	PrimaryDerivative=SAnac	Present Passive Participle	शानच्_लट् कर्मणि
+verbform_part|tense_past|prayoga_karwari	PrimaryDerivative=kwavawu	Past Active Participle	क्तवतु
+verbform_part|tense_past|prayoga_karmaNi	PrimaryDerivative=kwa	Past Passive Participle	क्त
+verbform_part|tense_perf|prayoga_kartari|pada_parasmai	PrimaryDerivative=kvasu	Perfect Active Participle	लिडादेश (क्वसु)
+verbform_part|tense_perf|prayoga_kartari|pada_atmane	PrimaryDerivative=kAnac	Perfect Middle Participle	लिडादेश (कानच्)
+verbform_part|tense_fut|prayoga_kartari|pada_parasmai	PrimaryDerivative=Sawq	Future Active Participle	शतृ_लृट्
+verbform_part|tense_fut|prayoga_kartari|pada_atmane	PrimaryDerivative=SAnac	Future Middle Participle	शानच्_लृट्
 verbform_gdv|kqw_yaw	kqw_prawyayaH:yaw	Future Passive Participle - yat	यत्
 verbform_gdv|kqw_anIyar	kqw_prawyayaH:anIyar	Future Passive Participle - anīyar	अनीयर्
 verbform_gdv|kqw_wavyaw	kqw_prawyayaH:wavyaw	Future Passive Participle - tavya	तव्य
 verbform_abs|kqw_kwvA	kqw_prawyayaH:kwvA	Absolutive - ktvā	क्त्वा
 verbform_abs|kqw_lyap	kqw_prawyayaH:lyap	Absolutive - lyap	ल्यप्
 verbform_abs|kqw_Namul	kqw_prawyayaH:Namul	Absolutive - ṇamul	णमुल्
-verbform_inf|kqw_wumun	VerbForm=Inf	Infinitive - tumun	तुमुन्
+verbform_inf|kqw_wumun	kqw_prawyayaH:wumun	Infinitive - tumun	तुमुन्
 verbform_gdv|kqw_Nyaw	kqw_prawyayaH:Nyaw	Future Passive Participle - ṇyat	ण्यत्
-kqw_kyap	kqw_prawyayaH:kyap	kyap	क्यप्
-kqw_kelimar	kqw_prawyayaH:kelimar	kelimar	केलिमर्
-kqw_Nvul	kqw_prawyayaH:Nvul	ṇvul	ण्वुल्
-kqw_wqc	kqw_prawyayaH:wqc	tṛc	तृच्
-kqw_lyu	kqw_prawyayaH:lyu	lyu	ल्यु
-kqw_Nini	kqw_prawyayaH:Nini	ṇini	णिनि
-kqw_ac	kqw_prawyayaH:ac	ac	अच्
-kqw_ka	kqw_prawyayaH:ka	ka	क
-kqw_Sa	kqw_prawyayaH:Sa	śa	श
-kqw_Na	kqw_prawyayaH:Na	ṇa	ण
-kqw_Rvun	kqw_prawyayaH:Rvun	ṣvun	ष्वुन्
-kqw_Wakan	kqw_prawyayaH:Wakan	thakan	थकन्
-kqw_Nyut	kqw_prawyayaH:Nyut	ṇyuṭ	ण्युट्
-kqw_vun	kqw_prawyayaH:vun	vun	वुन्
-kqw_aN	kqw_prawyayaH:aN	aṇ	अण्
-kqw_tak	kqw_prawyayaH:tak	ṭak	टक्
-kqw_ta	kqw_prawyayaH:ta	ṭa	ट
-kqw_in	kqw_prawyayaH:in	in	इन्
-kqw_KaS	kqw_prawyayaH:KaS	khaś	खश्
-kqw_Kac	kqw_prawyayaH:Kac	khac	खच्
-kqw_da	kqw_prawyayaH:da	ḍa	ड
-kqw_Kyun	kqw_prawyayaH:Kyun	khyun	ख्युन्
-kqw_KiRNuc	kqw_prawyayaH:KiRNuc	khiṣṇuc	खिष्णुच्
-kqw_KukaF	kqw_prawyayaH:KukaF	khukañ	खुकञ्
-kqw_kvin	kqw_prawyayaH:kvin	kvin	क्विन्
-kqw_kaF	kqw_prawyayaH:kaF	kañ	कञ्
-kqw_kvip	kqw_prawyayaH:kvip	kvip	क्विप्
-kqw_Nvi	kqw_prawyayaH:Nvi	ṇvi	ण्वि
-kqw_Fyut	kqw_prawyayaH:Fyut	ñyuṭ	ञ्युट्
-kqw_vit	kqw_prawyayaH:vit	viṭ	विट्
-kqw_kap	kqw_prawyayaH:kap	kap	कप्
-kqw_Nvin	kqw_prawyayaH:Nvin	ṇvin	ण्विन्
-kqw_vic	kqw_prawyayaH:vic	vic	विच्
-kqw_manin	kqw_prawyayaH:manin	manin	मनिन्
-kqw_kvanip	kqw_prawyayaH:kvanip	kvanip	क्वनिप्
-kqw_vanip	kqw_prawyayaH:vanip	vanip	वनिप्
-kqw_ini	kqw_prawyayaH:ini	ini	इनि
-kqw_fvanip	kqw_prawyayaH:fvanip	ṅvanip	ङ्वनिप्
-kqw_awqn	kqw_prawyayaH:awqn	atṛn	अतृन्
-kqw_SAyac	kqw_prawyayaH:SAyac	śāyac	शायच्
-kqw_SAnan	kqw_prawyayaH:SAnan	śānan	शानन्
-kqw_cAnaS	kqw_prawyayaH:cAnaS	cānaś	चानश्
-kqw_wqn	kqw_prawyayaH:wqn	tṛn	तृन्
-kqw_iRNuc	kqw_prawyayaH:iRNuc	iṣṇuc	इष्णुच्
-kqw_gsnu	kqw_prawyayaH:gsnu	gsnu	ग्स्नु
-kqw_knu	kqw_prawyayaH:knu	knu	क्नु
-kqw_GinuN	kqw_prawyayaH:GinuN	ghinuṇ	घिनुण्
-kqw_vuF	kqw_prawyayaH:vuF	vuñ	वुञ्
-kqw_yuc	kqw_prawyayaH:yuc	yuc	युच्
-kqw_ukaF	kqw_prawyayaH:ukaF	ukañ	उकञ्
-kqw_RAkan	kqw_prawyayaH:RAkan	ṣākan	षाकन्
-kqw_Aluc	kqw_prawyayaH:Aluc	āluc	आलुच्
-kqw_ru	kqw_prawyayaH:ru	ru	रु
-kqw_kmarac	kqw_prawyayaH:kmarac	kmarac	क्मरच्
-kqw_Gurac	kqw_prawyayaH:Gurac	ghurac	घुरच्
-kqw_kurac	kqw_prawyayaH:kurac	kurac	कुरच्
-kqw_kvarap	kqw_prawyayaH:kvarap	kvarap	क्वरप्
-kqw_Uka	kqw_prawyayaH:Uka	ūka	ऊक
-kqw_ra	kqw_prawyayaH:ra	ra	र
-kqw_u	kqw_prawyayaH:u	u	उ
-kqw_ki	kqw_prawyayaH:ki	ki	कि
-kqw_kin	kqw_prawyayaH:kin	kin	किन्
-kqw_najif	kqw_prawyayaH:najif	najiṅ	नजिङ्
-kqw_Aru	kqw_prawyayaH:Aru	āru	आरु
-kqw_kruk	kqw_prawyayaH:kruk	kruk	क्रुक्
-kqw_klukan	kqw_prawyayaH:klukan	klukan	क्लुकन्
-kqw_varac	kqw_prawyayaH:varac	varac	वरच्
-kqw_du	kqw_prawyayaH:du	ḍu	डु
-kqw_Rtran	kqw_prawyayaH:Rtran	ṣṭran	ष्ट्रन्
-kqw_iwra	kqw_prawyayaH:iwra	itra	इत्र
-kqw_GaF	kqw_prawyayaH:GaF	ghañ	घञ्
-kqw_ap	kqw_prawyayaH:ap	ap	अप्
-kqw_kwri	kqw_prawyayaH:kwri	ktri	क्त्रि
-kqw_aWuc	kqw_prawyayaH:aWuc	athuc	अथुच्
-kqw_naf	kqw_prawyayaH:naf	naṅ	नङ्
-kqw_nan	kqw_prawyayaH:nan		नन्
-kqw_kwin	kqw_prawyayaH:kwin	ktin	क्तिन्
-kqw_a	kqw_prawyayaH:a	a	अ
-kqw_af	kqw_prawyayaH:af	aṅ	अङ्
-kqw_iF	kqw_prawyayaH:iF	iñ	इञ्
-kqw_Nvuc	kqw_prawyayaH:Nvuc	ṇvuc	ण्वुच्
-kqw_ani	kqw_prawyayaH:ani	ani	अनि
-kqw_lyut	kqw_prawyayaH:lyut	lyuṭ	ल्युट्
-kqw_Ga	kqw_prawyayaH:Ga	gha	घ
-kqw_Kal	kqw_prawyayaH:Kal	khal	खल्
-kqw_kwic	kqw_prawyayaH:kwic	ktic	क्तिच्
-kqw_se	kqw_prawyayaH:se	se	से
-kqw_sen	kqw_prawyayaH:sen	sen	सेन्
-kqw_ase	kqw_prawyayaH:ase	ase	असे
-kqw_asen	kqw_prawyayaH:asen	asen	असेन्
-kqw_kse	kqw_prawyayaH:kse	kse	क्से
-kqw_ksen	kqw_prawyayaH:ksen	ksen	क्सेन्
-kqw_aXyE	kqw_prawyayaH:aXyE	adhyai	अध्यै
-kqw_aXyEn	kqw_prawyayaH:aXyEn	adhyain	अध्यैन्
-kqw_kaXyE	kqw_prawyayaH:kaXyE	kadhyai	कध्यै
-kqw_kaXyEn	kqw_prawyayaH:kaXyEn	kadhyain	कध्यैन्
-kqw_SaXyE	kqw_prawyayaH:SaXyE	śadhyai	शध्यै
-kqw_SaXyEn	kqw_prawyayaH:SaXyEn	śadhyain	शध्यैन्
-kqw_wavE	kqw_prawyayaH:wavE	tavai	तवै
-kqw_wavef	kqw_prawyayaH:wavef	taveṅ	तवेङ्
-kqw_wavena	kqw_prawyayaH:wavena	tavena	तवेन
-kqw_kamul	kqw_prawyayaH:kamul	kamul	कमुल्
-kqw_wosun	kqw_prawyayaH:wosun	tosun	तोसुन्
-kqw_kasun	kqw_prawyayaH:kasun	kasun	कसुन्
-kqw_ken	kqw_prawyayaH:ken	ken	केन्
-kqw_kenya	kqw_prawyayaH:kenya	kenya	केन्य
-kqw_wvan	kqw_prawyayaH:wvan	tvan	त्वन्
-kqw_Sena	kqw_prawyayaH:Sena	śena	शेन
-kqw_KamuF	kqw_prawyayaH:KamuF	khamuñ	खमुञ्
-waxXiwa_aN	waxXiwa_prawyayaH:aN	aṇ	अण्
-waxXiwa_iF	waxXiwa_prawyayaH:iF	iñ	इञ्
-waxXiwa_cPaF	waxXiwa_prawyayaH:cPaF	cphañ	च्फञ्
-waxXiwa_Tak	waxXiwa_prawyayaH:Tak	ṭhak	ठक्
-waxXiwa_GaF	waxXiwa_prawyayaH:GaF	ghañ	घञ्
-waxXiwa_wal	waxXiwa_prawyayaH:wal	tal	तल्
-waxXiwa_vawup	waxXiwa_prawyayaH:vawup	vatup	वतुप्
-waxXiwa_mawup	waxXiwa_prawyayaH:mawup	matup	मतुप्
-waxXiwa_tarap	waxXiwa_prawyayaH:warap	tarap	तरप्
-waxXiwa_tamap	waxXiwa_prawyayaH:wamap	tamap	तमप्
-waxXiwa_tva	waxXiwa_prawyayaH:wva	tva	त्व
-waxXiwa_vaw	waxXiwa_prawyayaH:vaw	vat	वत्
-waxXiwa_wasil	waxXiwa_prawyayaH:wasil	tasil	तसिल्
-waxXiwa_karam	waxXiwa_prawyayaH:karam	karam	करम्
-waxXiwa_arWam	waxXiwa_prawyayaH:arWam	artham	अर्थम्
-waxXiwa_pUrvaka	waxXiwa_prawyayaH:pUrvaka	pūrvaka	पूर्वक
-waxXiwa_vAram	waxXiwa_prawyayaH:vAram	vāram	वारम्
-waxXiwa_kqwvasuc	waxXiwa_prawyayaH:kqwvasuc	kṛtvasuc	कृत्वसुच्
-waxXiwa_xA	waxXiwa_prawyayaH:xA	dā	दा
-waxXiwa_Sas	waxXiwa_prawyayaH:Sas	śas	शस्
-waxXiwa_arWa_wasya_apawyam		tasya apatyam	तस्य अपत्यम्
-waxXiwa_arWa_wena_rakwam		tena raktam	तेन रक्तम्
-waxXiwa_arWa_asya_xevawA		asya devatā	अस्य देवता
-waxXiwa_arWa_xqRtam_sAma		dṛṣṭaṃ sāma	दृष्टं साम
-waxXiwa_arWa_wasya_BAvaH		tasya bhāvaḥ	तस्य भावः
-compound_base	Case=Cpd	Compound Component	पूर्वपद
-comp_iic			
-comp_ifc			
-comp_iiv		Compound Component (cvi)	पूर्वपद (च्वि)
-comp_upa		Compound Component (upapada)	पूर्वपद (उपपद)
-comp_aluk		Compound Component (aluk)	पूर्वपद (अलुक्)
+kqw_kyap	PrimaryDerivative=kyap	kyap	क्यप्
+kqw_kelimar	PrimaryDerivative=kelimar	kelimar	केलिमर्
+kqw_Nvul	PrimaryDerivative=Nvul	ṇvul	ण्वुल्
+kqw_wqc	PrimaryDerivative=wqc	tṛc	तृच्
+kqw_lyu	PrimaryDerivative=lyu	lyu	ल्यु
+kqw_Nini	PrimaryDerivative=Nini	ṇini	णिनि
+kqw_ac	PrimaryDerivative=ac	ac	अच्
+kqw_ka	PrimaryDerivative=ka	ka	क
+kqw_Sa	PrimaryDerivative=Sa	śa	श
+kqw_Na	PrimaryDerivative=Na	ṇa	ण
+kqw_Rvun	PrimaryDerivative=Rvun	ṣvun	ष्वुन्
+kqw_Wakan	PrimaryDerivative=Wakan	thakan	थकन्
+kqw_Nyut	PrimaryDerivative=Nyut	ṇyuṭ	ण्युट्
+kqw_vun	PrimaryDerivative=vun	vun	वुन्
+kqw_aN	PrimaryDerivative=aN	aṇ	अण्
+kqw_tak	PrimaryDerivative=tak	ṭak	टक्
+kqw_ta	PrimaryDerivative=ta	ṭa	ट
+kqw_in	PrimaryDerivative=in	in	इन्
+kqw_KaS	PrimaryDerivative=KaS	khaś	खश्
+kqw_Kac	PrimaryDerivative=Kac	khac	खच्
+kqw_da	PrimaryDerivative=da	ḍa	ड
+kqw_Kyun	PrimaryDerivative=Kyun	khyun	ख्युन्
+kqw_KiRNuc	PrimaryDerivative=KiRNuc	khiṣṇuc	खिष्णुच्
+kqw_KukaF	PrimaryDerivative=KukaF	khukañ	खुकञ्
+kqw_kvin	PrimaryDerivative=kvin	kvin	क्विन्
+kqw_kaF	PrimaryDerivative=kaF	kañ	कञ्
+kqw_kvip	PrimaryDerivative=kvip	kvip	क्विप्
+kqw_Nvi	PrimaryDerivative=Nvi	ṇvi	ण्वि
+kqw_Fyut	PrimaryDerivative=Fyut	ñyuṭ	ञ्युट्
+kqw_vit	PrimaryDerivative=vit	viṭ	विट्
+kqw_kap	PrimaryDerivative=kap	kap	कप्
+kqw_Nvin	PrimaryDerivative=Nvin	ṇvin	ण्विन्
+kqw_vic	PrimaryDerivative=vic	vic	विच्
+kqw_manin	PrimaryDerivative=manin	manin	मनिन्
+kqw_kvanip	PrimaryDerivative=kvanip	kvanip	क्वनिप्
+kqw_vanip	PrimaryDerivative=vanip	vanip	वनिप्
+kqw_ini	PrimaryDerivative=ini	ini	इनि
+kqw_fvanip	PrimaryDerivative=fvanip	ṅvanip	ङ्वनिप्
+kqw_awqn	PrimaryDerivative=awqn	atṛn	अतृन्
+kqw_SAyac	PrimaryDerivative=SAyac	śāyac	शायच्
+kqw_SAnan	PrimaryDerivative=SAnan	śānan	शानन्
+kqw_cAnaS	PrimaryDerivative=cAnaS	cānaś	चानश्
+kqw_wqn	PrimaryDerivative=wqn	tṛn	तृन्
+kqw_iRNuc	PrimaryDerivative=iRNuc	iṣṇuc	इष्णुच्
+kqw_gsnu	PrimaryDerivative=gsnu	gsnu	ग्स्नु
+kqw_knu	PrimaryDerivative=knu	knu	क्नु
+kqw_GinuN	PrimaryDerivative=GinuN	ghinuṇ	घिनुण्
+kqw_vuF	PrimaryDerivative=vuF	vuñ	वुञ्
+kqw_yuc	PrimaryDerivative=yuc	yuc	युच्
+kqw_ukaF	PrimaryDerivative=ukaF	ukañ	उकञ्
+kqw_RAkan	PrimaryDerivative=RAkan	ṣākan	षाकन्
+kqw_Aluc	PrimaryDerivative=Aluc	āluc	आलुच्
+kqw_ru	PrimaryDerivative=ru	ru	रु
+kqw_kmarac	PrimaryDerivative=kmarac	kmarac	क्मरच्
+kqw_Gurac	PrimaryDerivative=Gurac	ghurac	घुरच्
+kqw_kurac	PrimaryDerivative=kurac	kurac	कुरच्
+kqw_kvarap	PrimaryDerivative=kvarap	kvarap	क्वरप्
+kqw_Uka	PrimaryDerivative=Uka	ūka	ऊक
+kqw_ra	PrimaryDerivative=ra	ra	र
+kqw_u	PrimaryDerivative=u	u	उ
+kqw_ki	PrimaryDerivative=ki	ki	कि
+kqw_kin	PrimaryDerivative=kin	kin	किन्
+kqw_najif	PrimaryDerivative=najif	najiṅ	नजिङ्
+kqw_Aru	PrimaryDerivative=Aru	āru	आरु
+kqw_kruk	PrimaryDerivative=kruk	kruk	क्रुक्
+kqw_klukan	PrimaryDerivative=klukan	klukan	क्लुकन्
+kqw_varac	PrimaryDerivative=varac	varac	वरच्
+kqw_du	PrimaryDerivative=du	ḍu	डु
+kqw_Rtran	PrimaryDerivative=Rtran	ṣṭran	ष्ट्रन्
+kqw_iwra	PrimaryDerivative=iwra	itra	इत्र
+kqw_GaF	PrimaryDerivative=GaF	ghañ	घञ्
+kqw_ap	PrimaryDerivative=ap	ap	अप्
+kqw_kwri	PrimaryDerivative=kwri	ktri	क्त्रि
+kqw_aWuc	PrimaryDerivative=aWuc	athuc	अथुच्
+kqw_naf	PrimaryDerivative=naf	naṅ	नङ्
+kqw_nan	PrimaryDerivative=nan		नन्
+kqw_kwin	PrimaryDerivative=kwin	ktin	क्तिन्
+kqw_a	PrimaryDerivative=a	a	अ
+kqw_af	PrimaryDerivative=af	aṅ	अङ्
+kqw_iF	PrimaryDerivative=iF	iñ	इञ्
+kqw_Nvuc	PrimaryDerivative=Nvuc	ṇvuc	ण्वुच्
+kqw_ani	PrimaryDerivative=ani	ani	अनि
+kqw_lyut	PrimaryDerivative=lyut	lyuṭ	ल्युट्
+kqw_Ga	PrimaryDerivative=Ga	gha	घ
+kqw_Kal	PrimaryDerivative=Kal	khal	खल्
+kqw_kwic	PrimaryDerivative=kwic	ktic	क्तिच्
+kqw_se	PrimaryDerivative=se	se	से
+kqw_sen	PrimaryDerivative=sen	sen	सेन्
+kqw_ase	PrimaryDerivative=ase	ase	असे
+kqw_asen	PrimaryDerivative=asen	asen	असेन्
+kqw_kse	PrimaryDerivative=kse	kse	क्से
+kqw_ksen	PrimaryDerivative=ksen	ksen	क्सेन्
+kqw_aXyE	PrimaryDerivative=aXyE	adhyai	अध्यै
+kqw_aXyEn	PrimaryDerivative=aXyEn	adhyain	अध्यैन्
+kqw_kaXyE	PrimaryDerivative=kaXyE	kadhyai	कध्यै
+kqw_kaXyEn	PrimaryDerivative=kaXyEn	kadhyain	कध्यैन्
+kqw_SaXyE	PrimaryDerivative=SaXyE	śadhyai	शध्यै
+kqw_SaXyEn	PrimaryDerivative=SaXyEn	śadhyain	शध्यैन्
+kqw_wavE	PrimaryDerivative=wavE	tavai	तवै
+kqw_wavef	PrimaryDerivative=wavef	taveṅ	तवेङ्
+kqw_wavena	PrimaryDerivative=wavena	tavena	तवेन
+kqw_kamul	PrimaryDerivative=kamul	kamul	कमुल्
+kqw_wosun	PrimaryDerivative=wosun	tosun	तोसुन्
+kqw_kasun	PrimaryDerivative=kasun	kasun	कसुन्
+kqw_ken	PrimaryDerivative=ken	ken	केन्
+kqw_kenya	PrimaryDerivative=kenya	kenya	केन्य
+kqw_wvan	PrimaryDerivative=wvan	tvan	त्वन्
+kqw_Sena	PrimaryDerivative=Sena	śena	शेन
+kqw_KamuF	PrimaryDerivative=KamuF	khamuñ	खमुञ्
+waxXiwa_aN	SecondaryDerivative=aN	aṇ	अण्
+waxXiwa_iF	SecondaryDerivative=iF	iñ	इञ्
+waxXiwa_cPaF	SecondaryDerivative=cPaF	cphañ	च्फञ्
+waxXiwa_Tak	SecondaryDerivative=Tak	ṭhak	ठक्
+waxXiwa_GaF	SecondaryDerivative=GaF	ghañ	घञ्
+waxXiwa_wal	SecondaryDerivative=wal	tal	तल्
+waxXiwa_vawup	SecondaryDerivative=vawup	vatup	वतुप्
+waxXiwa_mawup	SecondaryDerivative=mawup	matup	मतुप्
+waxXiwa_tarap	SecondaryDerivative=tarap	tarap	तरप्
+waxXiwa_tamap	SecondaryDerivative=tamap	tamap	तमप्
+waxXiwa_tva	SecondaryDerivative=tva	tva	त्व
+waxXiwa_vaw	SecondaryDerivative=vaw	vat	वत्
+waxXiwa_wasil	SecondaryDerivative=wasil	tasil	तसिल्
+waxXiwa_karam	SecondaryDerivative=karam	karam	करम्
+waxXiwa_arWam	SecondaryDerivative=arWam	artham	अर्थम्
+waxXiwa_pUrvaka	SecondaryDerivative=pUrvaka	pūrvaka	पूर्वक
+waxXiwa_vAram	SecondaryDerivative=vAram	vāram	वारम्
+waxXiwa_kqwvasuc	SecondaryDerivative=kqwvasuc	kṛtvasuc	कृत्वसुच्
+waxXiwa_xA	SecondaryDerivative=xA	dā	दा
+waxXiwa_Sas	SecondaryDerivative=Sas	śas	शस्
+waxXiwa_arWa_wasya_apawyam	SecondaryDerivativeMeaning=wasya_apawyam	tasya apatyam	तस्य अपत्यम्
+waxXiwa_arWa_wena_rakwam	SecondaryDerivativeMeaning=wena_rakwam	tena raktam	तेन रक्तम्
+waxXiwa_arWa_asya_xevawA	SecondaryDerivativeMeaning=asya_xevawA	asya devatā	अस्य देवता
+waxXiwa_arWa_xqRtam_sAma	SecondaryDerivativeMeaning=xqRtam_sAma	dṛṣṭaṃ sāma	दृष्टं साम
+waxXiwa_arWa_wasya_BAvaH	SecondaryDerivativeMeaning=wasya_BAvaH	tasya bhāvaḥ	तस्य भावः
+compound_base	Case=Compound	Compound Component	पूर्वपद
+comp_iic	CompoundKind=iic		
+comp_ifc	CompoundKind=ifc		
+comp_iiv	CompoundKind=iiv	Compound Component (cvi)	पूर्वपद (च्वि)
+comp_upa	CompoundKind=Upapada	Compound Component (upapada)	पूर्वपद (उपपद)
+comp_aluk	CompounKind=Aluk	Compound Component (aluk)	पूर्वपद (अलुक्)
 compound_base|comp_iic	iic.		
 compound_base|comp_iiv	iiv.		
 compound_base|comp_upa			
 compound_base|comp_aluk			
-nip		Yes	Yes
-ved_pan		Vedic pāṇinīya	पाणिनीय छान्दस
-ved_apan		Non-pāṇinīya	अपाणिनीय
+nip	NounType=NipAwanam	Yes	Yes
+ved_pan	Construction=Panini	Vedic pāṇinīya	पाणिनीय छान्दस
+ved_apan	Construction=NonPanini	Non-pāṇinīya	अपाणिनीय
