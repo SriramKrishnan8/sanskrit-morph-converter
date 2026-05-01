@@ -65,10 +65,10 @@ SCL	kqw_prawyayaH:SAnac_lqt	verbform_part|tense_fut|prayoga_kartari|pada_atmane
 SCL	kqw_prawyayaH:yaw	verbform_gdv|kqw_yaw
 SCL	kqw_prawyayaH:anIyar	verbform_gdv|kqw_anIyar
 SCL	kqw_prawyayaH:wavyaw	verbform_gdv|kqw_wavyaw
-SCL	kqw_prawyayaH:kwvA	verbform_abs|kqw_kwvA
-SCL	kqw_prawyayaH:lyap	verbform_abs|kqw_lyap
-SCL	kqw_prawyayaH:Namul	verbform_abs|kqw_Namul
-SCL	kqw_prawyayaH:wumun	verbform_inf|kqw_wumun
+SCL	kqw_prawyayaH:kwvA	verbform_abs|kqw_kwvA|krt_ind
+SCL	kqw_prawyayaH:lyap	verbform_abs|kqw_lyap|krt_ind
+SCL	kqw_prawyayaH:Namul	verbform_abs|kqw_Namul|krt_ind
+SCL	kqw_prawyayaH:wumun	verbform_inf|kqw_wumun|krt_ind
 SCL	kqw_prawyayaH:Nyaw	verbform_gdv|kqw_Nyaw
 SCL	kqw_prawyayaH:kyap	kqw_kyap
 SCL	kqw_prawyayaH:kelimar	kqw_kelimar
@@ -191,7 +191,7 @@ SCL	waxXiwa_prawyayaH:warap	waxXiwa_tarap
 SCL	waxXiwa_prawyayaH:wamap	waxXiwa_tamap
 SCL	waxXiwa_prawyayaH:wva	waxXiwa_tva
 SCL	waxXiwa_prawyayaH:vaw	waxXiwa_vaw
-SCL	waxXiwa_prawyayaH:wasil	waxXiwa_wasil
+SCL	waxXiwa_prawyayaH:wasil	waxXiwa_wasil|tad_ind
 SCL	waxXiwa_prawyayaH:karam	waxXiwa_karam
 SCL	waxXiwa_prawyayaH:arWam	waxXiwa_arWam
 SCL	waxXiwa_prawyayaH:pUrvaka	waxXiwa_pUrvaka
@@ -277,37 +277,62 @@ SH	pp.	verbform_part|tense_past|prayoga_karmaNi
 SH	pfp_1	verbform_gdv|kqw_yaw
 SH	pfp_2	verbform_gdv|kqw_anIyar
 SH	pfp_3	verbform_gdv|kqw_wavyaw
-SH	inf.	verbform_inf|kqw_wumun
+SH	inf.	verbform_inf|kqw_wumun|krt_ind
+SH	tamap	waxXiwa_tamap
 SH	iic.	compound_base|comp_iic
 SH	iiv.	compound_base|comp_iiv
+ByT5	Gender=Masc	gender_masc
 ByT5	Gender=Masculine	gender_masc
+ByT5	Gender=Fem	gender_fem
 ByT5	Gender=Feminine	gender_fem
+ByT5	Gender=Neut	gender_neut
 ByT5	Gender=Neuter	gender_neut
+ByT5	Case=Nom	case_nom
 ByT5	Case=Nominative	case_nom
+ByT5	Case=Acc	case_acc
 ByT5	Case=Accusative	case_acc
+ByT5	Case=Ins	case_ins
 ByT5	Case=Instrumental	case_ins
+ByT5	Case=Dat	case_dat
 ByT5	Case=Dative	case_dat
+ByT5	Case=Abl	case_abl
 ByT5	Case=Ablative	case_abl
+ByT5	Case=Gen	case_gen
 ByT5	Case=Genitive	case_gen
+ByT5	Case=Loc	case_loc
 ByT5	Case=Locative	case_loc
+ByT5	Case=Voc	case_voc
 ByT5	Case=Vocative	case_voc
+ByT5	Number=Sing	num_sg
 ByT5	Number=Singular	num_sg
 ByT5	Number=Dual	num_du
+ByT5	Number=Plur	num_pl
 ByT5	Number=Plural	num_pl
 ByT5	Person=1	person_1
 ByT5	Person=2	person_2
 ByT5	Person=3	person_3
+ByT5	Tense=Pres	tense_pres
 ByT5	Tense=Present	tense_pres
 ByT5	Tense=Past	tense_aor||tense_past||tense_perf
+ByT5	Tense=Fut	tense_fut
 ByT5	Tense=Future	tense_fut
+ByT5	Tense=Impf	tense_impft
 ByT5	Tense=Imperfect	tense_impft
+ByT5	Tense=plp	tense_plp
 ByT5	Tense=Pluperfect	tense_plp
+ByT5	Mood=Ind	mood_ind
 ByT5	Mood=Indicative	mood_ind
+ByT5	Mood=Imp	mood_imp
 ByT5	Mood=Imperative	mood_imp
+ByT5	Mood=Opt	mood_opt||mood_prec
 ByT5	Mood=Optative	mood_opt||mood_prec
+ByT5	Mood=Sub	mood_subj
 ByT5	Mood=Subjunctive	mood_subj
+ByT5	Mood=Jus	mood_inj||mood_jus
 ByT5	Mood=Jussive	mood_inj||mood_jus
+ByT5	Mood=Cond	mood_cond
 ByT5	Mood=Conditional	mood_cond
+ByT5	Formation=peri	formation_peri
 ByT5	Formation=Periphrastic	formation_peri
 ByT5	Formation=root	formation_root
 ByT5	Formation=them	formation_them
@@ -316,12 +341,19 @@ ByT5	Formation=s	formation_s
 ByT5	Formation=is	formation_is
 ByT5	Formation=sis	formation_sis
 ByT5	Formation=sa	formation_sa
+ByT5	Voice=Pass	prayoga_karmaNi|paxa_Awmane
 ByT5	Voice=Passive	prayoga_karmaNi|paxa_Awmane
+ByT5	Case=Ind	ind
 ByT5	Indeclinable	ind
+ByT5	VerbForm=Part	verbform_part
 ByT5	VerbForm=Participle	verbform_part
+ByT5	VerbForm=Gdv	verbform_gdv
 ByT5	VerbForm=Gerundive	verbform_gdv
+ByT5	VerbForm=Conv	verbform_abs
 ByT5	VerbForm=Converb	verbform_abs
-ByT5	VerbForm=Infinitive	verbform_inf|kqw_wumun
+ByT5	VerbForm=Inf	verbform_inf|kqw_wumun|krt_ind
+ByT5	VerbForm=Infinitive	verbform_inf|kqw_wumun|krt_ind
+ByT5	Case=Cpd	compound_base
 ByT5	Case=Compound	compound_base
 DCS	Gender=Masc	gender_masc
 DCS	Gender=Fem	gender_fem
@@ -343,6 +375,9 @@ DCS	Person=3	person_3
 DCS	Tense=Pres	tense_pres
 DCS	Tense=Past	tense_aor||tense_past||tense_perf
 DCS	Tense=Fut	tense_fut
+DCS	Tense=Aor	tense_aor
+DCS	Tense=Perf	tense_perf
+DCS	Tense=Impft	tense_impft
 DCS	Tense=Impf	tense_impft
 DCS	Tense=plp	tense_plp
 DCS	Mood=Ind	mood_ind
@@ -350,6 +385,8 @@ DCS	Mood=Imp	mood_imp
 DCS	Mood=Opt	mood_opt||mood_prec
 DCS	Mood=Sub	mood_subj
 DCS	Mood=Jus	mood_inj||mood_jus
+DCS	Mood=Prec	mood_prec
+DCS	Mood=Inj	mood_inj
 DCS	Mood=Cond	mood_cond
 DCS	Formation=peri	formation_peri
 DCS	Formation=root	formation_root
@@ -363,8 +400,9 @@ DCS	Voice=Pass	prayoga_karmaNi|paxa_Awmane
 DCS	Case=Ind	ind
 DCS	VerbForm=Part	verbform_part
 DCS	VerbForm=Gdv	verbform_gdv
+DCS	VerbForm=Abs	verbform_abs
 DCS	VerbForm=Conv	verbform_abs
-DCS	VerbForm=Inf	verbform_inf|kqw_wumun
+DCS	VerbForm=Inf	verbform_inf|kqw_wumun|krt_ind
 DCS	Case=Cpd	compound_base
 Svarupa	NounType=Name	nt_nam
 Svarupa	NounType=Deictic	nt_dei
@@ -452,10 +490,10 @@ Svarupa	PrimaryDerivative=Future Middle Participle	verbform_part|tense_fut|prayo
 Svarupa	PrimaryDerivative=Future Passive Participle - yat	verbform_gdv|kqw_yaw
 Svarupa	PrimaryDerivative=Future Passive Participle - anīyar	verbform_gdv|kqw_anIyar
 Svarupa	PrimaryDerivative=Future Passive Participle - tavya	verbform_gdv|kqw_wavyaw
-Svarupa	PrimaryDerivative=Absolutive - ktvā	verbform_abs|kqw_kwvA
-Svarupa	PrimaryDerivative=Absolutive - lyap	verbform_abs|kqw_lyap
-Svarupa	PrimaryDerivative=Absolutive - ṇamul	verbform_abs|kqw_Namul
-Svarupa	PrimaryDerivative=Infinitive - tumun	verbform_inf|kqw_wumun
+Svarupa	PrimaryDerivative=Absolutive - ktvā	verbform_abs|kqw_kwvA|krt_ind
+Svarupa	PrimaryDerivative=Absolutive - lyap	verbform_abs|kqw_lyap|krt_ind
+Svarupa	PrimaryDerivative=Absolutive - ṇamul	verbform_abs|kqw_Namul|krt_ind
+Svarupa	PrimaryDerivative=Infinitive - tumun	verbform_inf|kqw_wumun|krt_ind
 Svarupa	PrimaryDerivative=Future Passive Participle - ṇyat	verbform_gdv|kqw_Nyaw
 Svarupa	PrimaryDerivative=kyap	kqw_kyap
 Svarupa	PrimaryDerivative=kelimar	kqw_kelimar
@@ -578,7 +616,7 @@ Svarupa	SecondaryDerivativeSuffix=tarap	waxXiwa_tarap
 Svarupa	SecondaryDerivativeSuffix=tamap	waxXiwa_tamap
 Svarupa	SecondaryDerivativeSuffix=tva	waxXiwa_tva
 Svarupa	SecondaryDerivativeSuffix=vat	waxXiwa_vaw
-Svarupa	SecondaryDerivativeSuffix=tasil	waxXiwa_wasil
+Svarupa	SecondaryDerivativeSuffix=tasil	waxXiwa_wasil|tad_ind
 Svarupa	SecondaryDerivativeSuffix=karam	waxXiwa_karam
 Svarupa	SecondaryDerivativeSuffix=artham	waxXiwa_arWam
 Svarupa	SecondaryDerivativeSuffix=pūrvaka	waxXiwa_pUrvaka
@@ -814,7 +852,7 @@ Canonical	SecondaryDerivative=tarap	waxXiwa_tarap
 Canonical	SecondaryDerivative=tamap	waxXiwa_tamap
 Canonical	SecondaryDerivative=tva	waxXiwa_tva
 Canonical	SecondaryDerivative=vaw	waxXiwa_vaw
-Canonical	SecondaryDerivative=wasil	waxXiwa_wasil
+Canonical	SecondaryDerivative=wasil	waxXiwa_wasil|tad_ind
 Canonical	SecondaryDerivative=karam	waxXiwa_karam
 Canonical	SecondaryDerivative=arWam	waxXiwa_arWam
 Canonical	SecondaryDerivative=pUrvaka	waxXiwa_pUrvaka
