@@ -431,7 +431,7 @@ class SHAdapter(BaseAdapter):
         segmentation = first_context.get('segmentation', [])
 
         # If it's blank, we need to stitch it together (e.g., from DCS source)
-        needs_stitching = not full_input_string
+        needs_stitching = not segmentation
 
         seg_string = ""
         morph_array_builder = []
@@ -544,42 +544,204 @@ class SHAdapter(BaseAdapter):
         return sh_json
 
 class SCLAdapter(BaseAdapter):
-    def decode(self, raw_string):
-        """UPDATED: Now returns a list of (context, tags) tuples with standardized keys."""
-        if not raw_string:
-            return []
+    def decode(self, raw_data):
+        """
+        Parses SCL output formats:
+        ^word/root1<tag1:val1>stem1<tag2:val2>/stem2<tag3:val3>$
+        """
+        if isinstance(raw_data, list):
+            items = raw_data
+        elif isinstance(raw_data, str):
+            try:
+                parsed = json.loads(raw_data)
+                items = parsed if isinstance(parsed, list) else [parsed]
+            except json.JSONDecodeError:
+                # SCL outputs are usually newline or space separated
+                items = raw_data.split('\n')
+        else:
+            items = [raw_data]
             
         analyses = []
-        blocks = raw_string.strip('$').split('/')
-        
-        for block in blocks:
-            if not block:
+        for item in items:
+            # Handle JSON inputs
+            if isinstance(item, dict):
+                word = item.get('input', '') or item.get('word', '')
+                morphs = item.get('morph', [])
+                for morph in morphs:
+                    stem = morph.get('stem', '')
+                    root = morph.get('root', '')
+                    tags = morph.get('tags', [])
+                    context = {
+                        'full_input': '',
+                        'raw_word': word,
+                        'clean_word': word,
+                        'stem': stem,
+                        'root': root
+                    }
+                    analyses.append((context, tags))
                 continue
-            tags = re.findall(r'<([^>]+)>', block)
-            if tags:
-                # Provide a standardized blank context dictionary
+
+            # Handle native SCL string format
+            item = item.strip().strip('^$')
+            if not item:
+                continue
+                
+            parts = item.split('/')
+            word = parts[0]
+            
+            for analysis in parts[1:]:
+                if not analysis:
+                    continue
+                
+                # 1. Extract all key-value tags
+                scl_tags = re.findall('<(.*?)>', analysis)
+
+                # 2. Extract text chunks by removing all <tags>
+                # Using filter to remove empty strings caused by adjacent tags
+                text_chunks = [chunk for chunk in re.split('<.*?>', analysis) if chunk]
+                
+                root = ""
+                stem = ""
+                
+                # --- THE ROOT VS STEM DEDUCTION LOGIC ---
+                if len(text_chunks) >= 2:
+                    # Derivation (Krt) typically has both spatially separated
+                    root = text_chunks[0]
+                    stem = text_chunks[1]
+                elif len(text_chunks) == 1:
+                    # Disambiguate the single chunk using its tags
+                    val = text_chunks[0]
+                    
+                    has_verbal = any(t.startswith('lakAraH:') or t.startswith('puruRaH:') for t in scl_tags)
+                    has_nominal = any(t.startswith('vargaH:') or t.startswith('lifgam:') or t.startswith('viBakwiH:') for t in scl_tags)
+                    
+                    if has_verbal:
+                        root = val
+                    elif has_nominal:
+                        stem = val
+                    else:
+                        # Fallback for indeclinables (avyaya) or unknowns
+                        stem = val
+                
+                upasarga = ""
+                clean_tags = []
+                
+                for tag in scl_tags:
+                    if tag.startswith('upasarga:'):
+                        upasarga = tag.split(':')[1]
+                    elif tag.startswith('level:'):
+                        pass # Ignore structural metadata
+                    else:
+                        clean_tags.append(tag) # e.g., "lifgam:puM"
+                
+                # Prepend Upasarga exactly like the legacy script did
+                if upasarga:
+                    root = f"{upasarga}-{root}" if root else root
+                    stem = f"{upasarga}-{stem}" if stem else stem
+                    
                 context = {
-                    'full_input': '',
-                    'raw_word': '',
-                    'clean_word': '',
-                    'stem': '',
-                    'root': ''
+                    'full_input': item,
+                    'raw_word': word,
+                    'clean_word': word.rstrip('-'),
+                    'stem': stem,
+                    'root': root
                 }
-                analyses.append((context, tags))
+                
+                # We pass the raw SCL tags (e.g., "viBakwiH:1"). 
+                # The engine handles the pivot mapping!
+                analyses.append((context, clean_tags))
                 
         return analyses
 
     def encode(self, translated_analyses_list, output_format='json', source_platform='Unknown'):
-        """UPDATED: Accepts the full payload list."""
+        """
+        SCL is primarily an analyzer (input). Generating perfect native SCL output strings 
+        requires generating <level:X> structural hierarchies, which is outside the scope of SMC.
+        We output a functional representation instead.
+        """
         if not translated_analyses_list:
             return []
-            
+
         results = []
-        for context, tags_set in translated_analyses_list:
-            out_str = "".join(f"<{tag}>" for tag in sorted(tags_set))
-            if out_str not in results:
-                results.append(out_str)
+        
+        # 1. STRING MODE: Fallback representation
+        if output_format == 'string':
+            word_groups = {}
+
+            for context, tags in translated_analyses_list:
+                word = context.get('raw_word', '')
+                stem = context.get('stem', '') 
+                root = context.get('root', '')
+                clean_tags = [t for t in tags if t and t.strip()]
                 
+                # --- TAG PARTITIONING LOGIC ---
+                if stem and root and stem != root:
+                    # Derivation: Separate tags into Root-specific and Stem-specific
+                    root_tags = []
+                    stem_tags = []
+                    
+                    for t in clean_tags:
+                        # Identify stem-specific tags
+                        if any(t.startswith(prefix) for prefix in ['vargaH:', 'lifgam:', 'viBakwiH:', 'vacanam:', 'level:']):
+                            stem_tags.append(t)
+                        else:
+                            # Everything else (XAwuH, kqw, lakAraH, etc.) attaches to the root
+                            root_tags.append(t)
+                            
+                    root_tag_str = "".join([f"<{t}>" for t in root_tags])
+                    stem_tag_str = "".join([f"<{t}>" for t in stem_tags])
+                    
+                    if not root_tags:
+                        # If mapping failed and we have no root tags, do NOT glue root and stem!
+                        # Fallback to the stem natively.
+                        chunk = f"{stem}{stem_tag_str}"
+                    else:
+                        chunk = f"{root}{root_tag_str}{stem}{stem_tag_str}"
+                    
+                else:
+                    # Simple word (either pure verbal root OR pure nominal stem)
+                    tag_str = "".join([f"<{t}>" for t in clean_tags])
+                    
+                    if root and not stem:
+                        chunk = f"{root}{tag_str}"
+                    else:
+                        # Default to stem if they are the same or only stem exists
+                        chunk = f"{stem}{tag_str}"
+                    
+                # Group chunks by their specific word
+                if word not in word_groups:
+                    word_groups[word] = []
+                    
+                if chunk not in word_groups[word]:
+                    word_groups[word].append(chunk)
+                    
+            # Compile each word's group into a separate SCL string
+            final_strings = []
+            for word, chunks in word_groups.items():
+                analyses_str = "/".join(chunks)
+                final_strings.append(f"^{word}/{analyses_str}$")
+                
+            return final_strings
+
+        # 2. JSON MODE: Flat Dictionary
+        for context, tags in translated_analyses_list:
+            word = context.get('raw_word', '')
+            stem = context.get('stem', '')
+            root = context.get('root', '')
+            
+            clean_tags = [t for t in tags if t and t.strip()]
+            
+            entry = {
+                "word": word,
+                "stem": stem,
+                "root": root,
+                "tags": clean_tags,
+                "source": source_platform # Injected exactly like ByT5/Canonical
+            }
+            
+            if entry not in results:
+                results.append(entry)
+            
         return results
 
 class SvarupaAdapter(BaseAdapter):
@@ -637,6 +799,12 @@ class CanonicalAdapter(BaseAdapter):
 
         analyses = []
         for item in items:
+            word = ""
+            stem = ""
+            root = ""
+            lemma = ""
+            morph_str = ""
+            
             if isinstance(item, dict):
                 word = item.get('word', '')
                 stem = item.get('stem', '')
@@ -645,11 +813,16 @@ class CanonicalAdapter(BaseAdapter):
                 # Reconstruct tags from flat JSON
                 tags = item.get('inflectional_morphs', []).copy()
                 if item.get('derivational_morph'):
-                    tags.append(item.get('derivational_morph'))
+                    tags.extend(item.get('derivational_morph').split('|'))
                     
             elif isinstance(item, str):
                 parts = item.split('_')
-                if len(parts) >= 3:
+                if len(parts) >= 4:
+                    word = parts[0]
+                    stem = parts[1]
+                    root = parts[2]
+                    morph_str = "_".join(parts[3:]) 
+                elif len(parts) >= 3:
                     word = parts[0]
                     lemma = parts[1]
                     morph_str = "_".join(parts[2:]) 
@@ -658,11 +831,24 @@ class CanonicalAdapter(BaseAdapter):
                 else:
                     word, lemma, morph_str = item, "", ""
                 
-                stem = root = lemma
                 tags = [t for t in morph_str.split('|') if t and t.strip()]
-            else:
-                continue
 
+                has_tense = any(t.startswith("Tense=") for t in tags)
+                has_mood = any(t.startswith("Mood=") for t in tags)
+                has_verbform = any(t.startswith("VerbForm=") for t in tags)
+                has_case = any(t.startswith("Case=") for t in tags)
+
+                if stem and root:
+                    pass
+                elif has_tense and has_mood:
+                    root = lemma
+                elif has_verbform and has_case:
+                    stem = lemma
+                elif has_verbform and not has_case:
+                    root = lemma
+                else:
+                    stem = lemma
+            
             context = {
                 'full_input': '',
                 'raw_word': word,
@@ -685,30 +871,46 @@ class CanonicalAdapter(BaseAdapter):
             stem = context.get('stem', '')
             root = context.get('root', '')
 
+            # Clean tags immediately for both formats
+            clean_tags = [t for t in tags_set if t and t.strip()]
+
             # -----------------------------------------
             # JSON MODE
             # -----------------------------------------
             if output_format == 'json':
-                derivational_morph = ""
+                derivational_morphs = []
                 inflectional_morphs = []
+
+                # 1. Identify the Structural Anchor of the word
+                is_derivative = any(t.startswith(("VerbForm=", "PrimaryDerivative=", "SecondaryDerivative=")) for t in clean_tags)
+                is_finite_verb = any(t.startswith("Mood=") for t in clean_tags)
 
                 # Heuristic to separate Canonical tags into Derivational vs Inflectional
                 for tag in tags_set:
-                    if not tag or not tag.strip(): 
-                        continue
-
-                    # Check against the keywords from your Canonical sheet
-                    if any(keyword in tag for keyword in ["Participle", "Gerundive", "Absolutive", "Infinitive", "Derivative"]):
-                        derivational_morph = tag
+                    # ALWAYS INFLECTIONAL (Declensions & Verb Persons/Numbers)
+                    if tag.startswith(("Case=", "Gender=", "Number=", "Person=")):
+                        inflectional_morphs.append(tag)
+                    # ALWAYS DERIVATIONAL (The Anchor Tags)
+                    elif tag.startswith(("VerbForm=", "PrimaryDerivative=", "SecondaryDerivative=")):
+                        derivational_morphs.append(tag)
+                    # THE POLYMORPHIC TAGS: Context-Dependent Routing
+                    elif tag.startswith(("Tense=", "Prayoga=", "PaxI=", "Class=", "Conjugation=", "Formation=")):
+                        if is_finite_verb and not is_derivative:
+                            # For a finite verb (e.g., bhavati), Tense/Voice/Class are part of the inflection
+                            inflectional_morphs.append(tag)
+                        else:
+                            # For a participle (e.g., bhavan), Tense/Voice/Class describe the krt suffix
+                            derivational_morphs.append(tag)
+                    # Fallback for anything else (Mood, NounType, etc.)
                     else:
                         inflectional_morphs.append(tag)
 
                 entry = {
-                    "input": word,
+                    "word": word,
                     "stem": stem,
                     "root": root,
-                    "derivational_morph": derivational_morph,
-                    "inflectional_morphs": inflectional_morphs,
+                    "derivational_morph": "|".join(sorted(derivational_morphs)),
+                    "inflectional_morphs": ["|".join(sorted(inflectional_morphs))],
                     "source": source_platform
                 }
 
@@ -720,8 +922,7 @@ class CanonicalAdapter(BaseAdapter):
             # -----------------------------------------
             else:
                 # Sort alphabetically so evaluations are mathematically consistent
-                morph_str = "|".join(sorted(tags_set))
-                clean_tags = [t for t in tags_set if t and t.strip()]
+                morph_str = "|".join(sorted(clean_tags))
             
                 if stem and root:
                     lemma = f"{stem}_{root}"
@@ -732,8 +933,8 @@ class CanonicalAdapter(BaseAdapter):
                 else:
                     lemma = stem
                 
-                word_out = word if word else "_"
-                lemma_out = lemma if lemma else "_"
+                word_out = word if word else ""
+                lemma_out = lemma if lemma else ""
                 
                 out_str = f"{word_out}_{lemma_out}_{morph_str}"
 
