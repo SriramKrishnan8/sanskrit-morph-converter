@@ -35,6 +35,7 @@ def compile_mappings(sheet_id=DEFAULT_SHEET_ID, local_tsv_path=None):
     os.makedirs(data_dir, exist_ok=True)
     
     norm_tsv = os.path.join(data_dir, 'normalization.tsv')
+    out_norm_tsv = os.path.join(data_dir, 'output_normalization.tsv')
     pivot_tsv = os.path.join(data_dir, 'pivot_mapping.tsv')
     reference_tsv = os.path.join(data_dir, 'reference.tsv')
 
@@ -46,6 +47,9 @@ def compile_mappings(sheet_id=DEFAULT_SHEET_ID, local_tsv_path=None):
         if not records: return
 
     normalizations = []
+    output_normalizations = []
+    convergences = {'DCS': defaultdict(set), 'ByT5': defaultdict(set)}
+    
     tag_mappings = {
         'SCL': defaultdict(set), 'SH': defaultdict(set), 
         'ByT5': defaultdict(set), 'DCS': defaultdict(set),
@@ -80,8 +84,6 @@ def compile_mappings(sheet_id=DEFAULT_SHEET_ID, local_tsv_path=None):
         
         # 2. THE UNIVERSAL PIVOT FEATURE
         pivot_val = str(row.get('pivot_grammar', '')).strip()
-        canonical_dcs = dcs_new_val if dcs_new_val else dcs_val
-        canonical_byt5 = byt5_new_val if byt5_new_val else byt5_val
         
         # Determine the "Expanded_Features" for the reference sheet (No trackers used!)
         expanded_kv = canonical_val if canonical_val else (scl_val if scl_val else sh_internal)
@@ -108,28 +110,49 @@ def compile_mappings(sheet_id=DEFAULT_SHEET_ID, local_tsv_path=None):
 
         # 3. NORMALIZATION (Aliases)
         if dcs_val and dcs_new_val and dcs_new_val != dcs_val:
-            normalizations.append({
-                'Platform': 'DCS', 
-                'Deprecated_Tag': dcs_val, 
-                'Current_Tag': dcs_new_val
-            })
+            convergences['DCS'][dcs_new_val].add(dcs_val)
         
         if byt5_val and byt5_new_val and byt5_new_val != byt5_val:
-            normalizations.append({
-                'Platform': 'ByT5', 
-                'Deprecated_Tag': byt5_val, 
-                'Current_Tag': byt5_new_val
-            })
+            convergences['ByT5'][byt5_new_val].add(byt5_val)
 
         # 4. MAP PLATFORMS STRICTLY TO THIS ROW
         # If the cell is blank, the platform gets NOTHING for this row.
         if scl_val: tag_mappings['SCL'][scl_val].add(pivot_feature)
         if sh_internal: tag_mappings['SH'][sh_internal].add(pivot_feature)
-        if canonical_byt5: tag_mappings['ByT5'][canonical_byt5].add(pivot_feature)
-        if canonical_dcs: tag_mappings['DCS'][canonical_dcs].add(pivot_feature)
+        if byt5_val: tag_mappings['ByT5'][byt5_val].add(pivot_feature)
+        if byt5_new_val: tag_mappings['ByT5'][byt5_new_val].add(pivot_feature)
+        if dcs_val: tag_mappings['DCS'][dcs_val].add(pivot_feature)
+        if dcs_new_val: tag_mappings['DCS'][dcs_new_val].add(pivot_feature)
         if svarupa_val: tag_mappings['Svarupa'][svarupa_val].add(pivot_feature)
         if canonical_val: tag_mappings['Canonical'][canonical_val].add(pivot_feature)
 
+    # ==========================================
+    # AUTOMATIC ALIAS VS COMPRESSION ROUTING
+    # ==========================================
+    # Run this AFTER the loop finishes, right before you write the files!
+    
+    for platform in ['DCS', 'ByT5']:
+        for new_tag, old_tags in convergences[platform].items():
+            if len(old_tags) == 1:
+                # ALIAS (1:1) -> Safe for Input Normalization
+                old_tag = list(old_tags)[0]
+                if old_tag != new_tag:
+                    normalizations.append({
+                        'Platform': platform, 
+                        'Deprecated_Tag': old_tag, 
+                        'Current_Tag': new_tag
+                    })
+            else:
+                # COMPRESSION (N:1) -> Must use Output Normalization to prevent data loss!
+                for old_tag in old_tags:
+                    if old_tag != new_tag:
+                        output_normalizations.append({
+                            'Platform': platform, 
+                            'Deprecated_Tag': old_tag, 
+                            'Current_Tag': new_tag
+                        })
+    
+    
     # ==========================================
     # WRITE OUTPUTS
     # ==========================================
@@ -138,6 +161,11 @@ def compile_mappings(sheet_id=DEFAULT_SHEET_ID, local_tsv_path=None):
         writer.writeheader()
         writer.writerow({'Platform': 'SH', 'Deprecated_Tag': 'md.', 'Current_Tag': 'mo.'})
         for norm in normalizations: writer.writerow(norm)
+
+    with open(out_norm_tsv, 'w', encoding='utf-8', newline='') as f:
+        writer = csv.DictWriter(f, fieldnames=['Platform', 'Deprecated_Tag', 'Current_Tag'], delimiter='\t')
+        writer.writeheader()
+        for norm in output_normalizations: writer.writerow(norm)
 
     with open(pivot_tsv, 'w', encoding='utf-8', newline='') as f:
         writer = csv.writer(f, delimiter='\t')
