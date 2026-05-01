@@ -133,10 +133,10 @@ verbform_part|tense_fut|prayoga_kartari|pada_atmane	PrimaryDerivative=SAnac	Futu
 verbform_gdv|kqw_yaw	kqw_prawyayaH:yaw	Future Passive Participle - yat	यत्
 verbform_gdv|kqw_anIyar	kqw_prawyayaH:anIyar	Future Passive Participle - anīyar	अनीयर्
 verbform_gdv|kqw_wavyaw	kqw_prawyayaH:wavyaw	Future Passive Participle - tavya	तव्य
-verbform_abs|kqw_kwvA	kqw_prawyayaH:kwvA	Absolutive - ktvā	क्त्वा
-verbform_abs|kqw_lyap	kqw_prawyayaH:lyap	Absolutive - lyap	ल्यप्
-verbform_abs|kqw_Namul	kqw_prawyayaH:Namul	Absolutive - ṇamul	णमुल्
-verbform_inf|kqw_wumun	kqw_prawyayaH:wumun	Infinitive - tumun	तुमुन्
+verbform_abs|kqw_kwvA|krt_ind	kqw_prawyayaH:kwvA	Absolutive - ktvā	क्त्वा
+verbform_abs|kqw_lyap|krt_ind	kqw_prawyayaH:lyap	Absolutive - lyap	ल्यप्
+verbform_abs|kqw_Namul|krt_ind	kqw_prawyayaH:Namul	Absolutive - ṇamul	णमुल्
+verbform_inf|kqw_wumun|krt_ind	kqw_prawyayaH:wumun	Infinitive - tumun	तुमुन्
 verbform_gdv|kqw_Nyaw	kqw_prawyayaH:Nyaw	Future Passive Participle - ṇyat	ण्यत्
 kqw_kyap	PrimaryDerivative=kyap	kyap	क्यप्
 kqw_kelimar	PrimaryDerivative=kelimar	kelimar	केलिमर्
@@ -259,7 +259,7 @@ waxXiwa_tarap	SecondaryDerivative=tarap	tarap	तरप्
 waxXiwa_tamap	SecondaryDerivative=tamap	tamap	तमप्
 waxXiwa_tva	SecondaryDerivative=tva	tva	त्व
 waxXiwa_vaw	SecondaryDerivative=vaw	vat	वत्
-waxXiwa_wasil	SecondaryDerivative=wasil	tasil	तसिल्
+waxXiwa_wasil|tad_ind	SecondaryDerivative=wasil	tasil	तसिल्
 waxXiwa_karam	SecondaryDerivative=karam	karam	करम्
 waxXiwa_arWam	SecondaryDerivative=arWam	artham	अर्थम्
 waxXiwa_pUrvaka	SecondaryDerivative=pUrvaka	pūrvaka	पूर्वक

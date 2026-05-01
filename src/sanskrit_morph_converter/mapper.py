@@ -2,13 +2,15 @@ import os
 import pandas as pd
 
 class PivotMapper:
-    def __init__(self, norm_path=None, pivot_path=None):
+    def __init__(self, norm_path=None, pivot_path=None, out_norm_path=None):
         base_dir = os.path.dirname(__file__)
         self.norm_path = norm_path or os.path.join(base_dir, 'data', 'normalization.tsv')
         self.pivot_path = pivot_path or os.path.join(base_dir, 'data', 'pivot_mapping.tsv')
+        self.out_norm_path = out_norm_path or os.path.join(base_dir, 'data', 'output_normalization.tsv')
         
         # self.norms[platform][deprecated] = canonical
         self.norms = {} 
+        self.out_norms = {}
         
         # self.encode_map[platform][platform_tag] = set_of_pivot_features
         self.encode_map = {} 
@@ -26,6 +28,13 @@ class PivotMapper:
             if plat not in self.norms: self.norms[plat] = {}
             self.norms[plat][row['Deprecated_Tag']] = row['Current_Tag']
 
+        if os.path.exists(self.out_norm_path):
+            df_out_norm = pd.read_csv(self.out_norm_path, sep="\t").fillna("")
+            for _, row in df_out_norm.iterrows():
+                plat = row['Platform']
+                if plat not in self.out_norms: self.out_norms[plat] = {}
+                self.out_norms[plat][row['Deprecated_Tag']] = row['Current_Tag']
+        
         # 2. Load Pivot Mappings
         df_pivot = pd.read_csv(self.pivot_path, sep="\t").fillna("")
         for _, row in df_pivot.iterrows():
@@ -46,6 +55,20 @@ class PivotMapper:
     def normalize(self, platform, tags_list):
         """Replaces deprecated tags with canonical ones."""
         return [self.norms.get(platform, {}).get(tag, tag) for tag in tags_list]
+    
+    def output_normalize(self, platform, tags_list):
+        """Forces target tags to upgrade to their modern equivalents (Compressions AND Aliases)."""
+        upgraded = []
+        for tag in tags_list:
+            # 1. Try to upgrade compressions (N:1) from out_norms
+            t1 = self.out_norms.get(platform, {}).get(tag, tag)
+            
+            # 2. Try to upgrade aliases (1:1) from norms
+            t2 = self.norms.get(platform, {}).get(t1, t1)
+            
+            upgraded.append(t2)
+            
+        return upgraded
 
     def to_pivot(self, platform, tags_list):
         """Converts platform tags into a unified pool of Pivot features."""
