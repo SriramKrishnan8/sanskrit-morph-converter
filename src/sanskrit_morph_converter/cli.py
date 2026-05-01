@@ -54,7 +54,7 @@ def run_convert(args):
     
     if len(inputs_list) == 1:
         try:
-            res = converter.convert(args.source, args.target, inputs_list[0], args.format, args.script)
+            res = converter.convert(args.source, args.target, inputs_list[0], args.format, args.output_script, args.input_script)
             
             # --- DYNAMIC STATUS LOGIC FOR CLI ---
             if isinstance(res, list):
@@ -75,7 +75,7 @@ def run_convert(args):
         except Exception as e:
             final_output = [{"input": inputs_list[0], "output": str(e), "status": "Error"}]
     else:
-        final_output = converter.convert_bulk(args.source, args.target, inputs_list, args.format, args.script)
+        final_output = converter.convert_bulk(args.source, args.target, inputs_list, args.format, args.output_script, args.input_script)
 
     out_str = json.dumps(final_output, indent=2, ensure_ascii=False)
     
@@ -104,7 +104,8 @@ def main():
     parser_convert.add_argument("source", help="Source platform (e.g., DCS, SCL, ByT5, SH, Svarupa)")
     parser_convert.add_argument("target", help="Target platform (e.g., SH, DCS, ByT5, SCL, Svarupa)")
     parser_convert.add_argument("--format", choices=["json", "string"], default="json", help="Requested output format (default: json).")
-    parser_convert.add_argument("--script", help="Force an output script (e.g., IAST, Devanagari, WX). Overrides platform default.")
+    parser_convert.add_argument("-os", "--output-script", dest="output_script", help="Force an output script (e.g., IAST, Devanagari, WX). Overrides platform default.")
+    parser_convert.add_argument("-is", "--input-script", dest="input_script", help="Specify the input script. Defaults to 'autodetect'.")
     
     group = parser_convert.add_mutually_exclusive_group(required=True)
     group.add_argument("-i", "--input", help="A single string or JSON payload to convert.")
